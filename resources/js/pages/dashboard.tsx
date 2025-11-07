@@ -2,11 +2,20 @@ import { BMICalculator } from '@/components/bmi-calculator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
+import { weightByAgeBoys } from './boys';
+import { weightByAgeGirls } from './girls';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,20 +24,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const weightByAge = [
-    [2.1, 2.5, 2.9, 3.3, 3.9, 4.4, 5.0],
-    [2.9, 3.4, 3.9, 4.5, 5.1, 5.8, 6.6],
-    [3.8, 4.3, 4.9, 5.6, 6.3, 7.1, 8.0],
-    [4.4, 5.0, 5.7, 6.4, 7.2, 8.0, 9.0],
-];
-
 const zScore = ['-3SD', '-2SD', '-1SD', 'Median', '+1SD', '+2SD', '+3SD'];
-// const category = [
-//     'Severely Underweight',
-//     'Underweight',
-//     'Normal',
-//     'Risk of Obesity',
-// ];
 const zScoreCategory = [
     {
         zScore: ['<-3SD'],
@@ -64,6 +60,7 @@ export default function Dashboard() {
     const [weight, setWeight] = useState<string>('');
     const [result, setResult] = useState<string>('');
     const [category, setCategory] = useState<string>('');
+    const [gender, setGender] = useState<'male' | 'female'>('male');
 
     const getZScoreCategory = (zScore: string) => {
         const category = zScoreCategory.find((item) =>
@@ -73,7 +70,10 @@ export default function Dashboard() {
     };
 
     const getResult = () => {
-        const weightList = weightByAge[Number(age)];
+        const weightList =
+            gender === 'male'
+                ? weightByAgeBoys[Number(age)]
+                : weightByAgeGirls[Number(age)];
         const nearest = weightList.reduce((prev, curr) => {
             return Math.abs(curr - Number(weight)) <
                 Math.abs(prev - Number(weight))
@@ -101,7 +101,7 @@ export default function Dashboard() {
                     <BMICalculator />
                 </div>
                 <h1>BB/U</h1>
-                <div className="flex flex-1 items-center justify-center p-8">
+                <div className="flex flex-1 flex-col items-center justify-center p-8">
                     <div className="space-y-2">
                         <Label htmlFor="age">Age</Label>
                         <Input
@@ -125,6 +125,23 @@ export default function Dashboard() {
                             min="1"
                             max="100"
                         />
+                    </div>
+                    <div>
+                        <Label htmlFor="gender">Gender</Label>
+                        <Select
+                            value={gender}
+                            onValueChange={(value) =>
+                                setGender(value as 'male' | 'female')
+                            }
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select gender" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="male">Male</SelectItem>
+                                <SelectItem value="female">Female</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <Button onClick={getResult}>Calculate</Button>
                 </div>
