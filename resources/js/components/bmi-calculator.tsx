@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useState } from 'react';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from './ui/select';
 
 interface BMIResult {
     bmi: number;
@@ -14,6 +27,8 @@ interface BMIResult {
 export function BMICalculator() {
     const [height, setHeight] = useState<string>('');
     const [weight, setWeight] = useState<string>('');
+    const [gender, setGender] = useState<'male' | 'female'>('male');
+    const [age, setAge] = useState<string>('');
     const [result, setResult] = useState<BMIResult | null>(null);
 
     const calculateBMI = () => {
@@ -25,7 +40,11 @@ export function BMICalculator() {
             const roundedBMI = Math.round(bmi * 10) / 10;
 
             let category: string;
-            let categoryColor: 'default' | 'secondary' | 'destructive' | 'outline';
+            let categoryColor:
+                | 'default'
+                | 'secondary'
+                | 'destructive'
+                | 'outline';
 
             if (bmi < 18.5) {
                 category = 'Underweight';
@@ -44,7 +63,7 @@ export function BMICalculator() {
             setResult({
                 bmi: roundedBMI,
                 category,
-                categoryColor
+                categoryColor,
             });
         }
     };
@@ -55,23 +74,25 @@ export function BMICalculator() {
         setResult(null);
     };
 
-    const isValidInput = height && weight && parseFloat(height) > 0 && parseFloat(weight) > 0;
+    const isValidInput =
+        height && weight && parseFloat(height) > 0 && parseFloat(weight) > 0;
 
     return (
-        <Card className="w-full max-w-md mx-auto">
+        <Card className="flex-1">
             <CardHeader>
                 <CardTitle>BMI Calculator</CardTitle>
                 <CardDescription>
-                    Calculate your Body Mass Index to assess your weight category
+                    Calculate your Body Mass Index to assess your weight
+                    category
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="height">Height (cm)</Label>
+                    <Label htmlFor="height">Panjang / Tinggi Badan (cm)</Label>
                     <Input
                         id="height"
                         type="number"
-                        placeholder="Enter height in centimeters"
+                        placeholder="Masukkan tinggi badan dalam sentimeter"
                         value={height}
                         onChange={(e) => setHeight(e.target.value)}
                         min="1"
@@ -80,11 +101,11 @@ export function BMICalculator() {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="weight">Weight (kg)</Label>
+                    <Label htmlFor="weight">Berat Badan (kg)</Label>
                     <Input
                         id="weight"
                         type="number"
-                        placeholder="Enter weight in kilograms"
+                        placeholder="Masukkan berat badan dalam kilogram"
                         value={weight}
                         onChange={(e) => setWeight(e.target.value)}
                         min="1"
@@ -93,16 +114,47 @@ export function BMICalculator() {
                     />
                 </div>
 
+                <div className="space-y-2">
+                    <Label htmlFor="age">Umur (bulan)</Label>
+                    <Input
+                        id="age"
+                        type="number"
+                        placeholder="Masukkan umur dalam bulan"
+                        value={age}
+                        onChange={(e) => setAge(e.target.value)}
+                        min="1"
+                        max="100"
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="gender">Jenis Kelamin</Label>
+                    <Select
+                        value={gender}
+                        onValueChange={(value) =>
+                            setGender(value as 'male' | 'female')
+                        }
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+
                 <div className="flex gap-2">
-                    <Button 
-                        onClick={calculateBMI} 
+                    <Button
+                        onClick={calculateBMI}
                         disabled={!isValidInput}
                         className="flex-1"
                     >
                         Calculate BMI
                     </Button>
-                    <Button 
-                        variant="outline" 
+                    <Button
+                        variant="outline"
                         onClick={resetCalculator}
                         disabled={!height && !weight && !result}
                     >
@@ -111,21 +163,23 @@ export function BMICalculator() {
                 </div>
 
                 {result && (
-                    <div className="mt-6 p-4 bg-muted rounded-lg space-y-3">
+                    <div className="mt-6 space-y-3 rounded-lg bg-muted p-4">
                         <div className="text-center">
                             <div className="text-2xl font-bold text-primary">
                                 {result.bmi}
                             </div>
-                            <div className="text-sm text-muted-foreground">BMI</div>
+                            <div className="text-sm text-muted-foreground">
+                                BMI
+                            </div>
                         </div>
-                        
+
                         <div className="flex justify-center">
                             <Badge variant={result.categoryColor}>
                                 {result.category}
                             </Badge>
                         </div>
 
-                        <div className="text-xs text-muted-foreground space-y-1">
+                        <div className="space-y-1 text-xs text-muted-foreground">
                             <div className="font-medium">BMI Categories:</div>
                             <div>• Underweight: Below 18.5</div>
                             <div>• Normal weight: 18.5 - 24.9</div>
