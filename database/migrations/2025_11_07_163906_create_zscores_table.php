@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('zscore', function (Blueprint $table) {
+        Schema::create('zscores', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('age')->unsigned();
             $table->float('min3SD', 3, 2);

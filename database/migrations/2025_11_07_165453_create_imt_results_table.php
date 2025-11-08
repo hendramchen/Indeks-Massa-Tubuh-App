@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('imt_result', function (Blueprint $table) {
+        Schema::create('imt_results', function (Blueprint $table) {
             $table->id();
             $table->string('father_name')->nullable();
             $table->string('mother_name')->nullable();

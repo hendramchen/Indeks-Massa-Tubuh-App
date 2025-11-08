@@ -78,7 +78,7 @@ class ZscoreBBFemaleSeeder extends Seeder
         ];
 
         foreach ($dataBBFemale as $index => $row) {
-            DB::table('zscore')->insert([
+            DB::table('zscores')->insert([
                 'age' => $index,
                 'min3SD' => $row[0],
                 'min2SD' => $row[1],

@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ZscoreSeeder extends Seeder
+class ZscoreBBMaleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -78,7 +78,7 @@ class ZscoreSeeder extends Seeder
         ];
 
         foreach ($dataBBMale as $index => $row) {
-            DB::table('zscore')->insert([
+            DB::table('zscores')->insert([
                 'age' => $index,
                 'min3SD' => $row[0],
                 'min2SD' => $row[1],
