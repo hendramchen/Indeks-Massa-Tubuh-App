@@ -131,13 +131,13 @@ export function BMICalculator() {
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                             min="1"
-                            max="1000"
+                            max="100"
                             step="0.1"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="age">Umur (bulan)</Label>
+                        <Label htmlFor="age">Umur (bulan) 0 - 60</Label>
                         <Input
                             id="age"
                             name="age"
@@ -145,8 +145,8 @@ export function BMICalculator() {
                             placeholder="Masukkan umur dalam bulan"
                             value={age}
                             onChange={(e) => setAge(e.target.value)}
-                            min="1"
-                            max="100"
+                            min="0"
+                            max="60"
                         />
                     </div>
 

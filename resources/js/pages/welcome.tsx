@@ -1,7 +1,8 @@
 import { BMICalculator } from '@/components/bmi-calculator';
-import { dashboard, login, register } from '@/routes';
-import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+// import { dashboard, login, register } from '@/routes';
+// import { type SharedData } from '@/types';
+// import { Head, Link, usePage } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import AntropometriTable from './antropometri-table';
 
 export default function Welcome({
@@ -9,11 +10,11 @@ export default function Welcome({
 }: {
     canRegister?: boolean;
 }) {
-    const { auth } = usePage<SharedData>().props;
+    // const { auth } = usePage<SharedData>().props;
 
     return (
         <>
-            <Head title="Welcome">
+            <Head title="Sigizi App">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link
                     href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
@@ -21,8 +22,11 @@ export default function Welcome({
                 />
             </Head>
             <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-2 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
-                <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
-                    <nav className="flex items-center justify-end gap-4">
+                <header className="my-4 w-full">
+                    <h1 className="text-center text-2xl font-semibold dark:text-white">
+                        Selamat datang di Sigizi App
+                    </h1>
+                    {/* <nav className="flex items-center justify-end gap-4">
                         {auth.user ? (
                             <Link
                                 href={dashboard()}
@@ -48,7 +52,7 @@ export default function Welcome({
                                 )}
                             </>
                         )}
-                    </nav>
+                    </nav> */}
                 </header>
                 <div className="container flex flex-col justify-between gap-4 opacity-100 transition-opacity duration-750 md:flex-row lg:grow starting:opacity-0">
                     <BMICalculator />

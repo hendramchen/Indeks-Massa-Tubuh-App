@@ -1,52 +1,16 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import CardResult from '@/components/card-result';
 import { Label } from '@/components/ui/label';
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { Head } from '@inertiajs/react';
-
-interface ZscoreData {
-    min3SD: number;
-    min2SD: number;
-    min1SD: number;
-    median: number;
-    plus1SD: number;
-    plus2SD: number;
-    plus3SD: number;
-}
-const zScore = ['-3SD', '-2SD', '-1SD', 'Median', '+1SD', '+2SD', '+3SD'];
-const zScoreCategory = [
-    {
-        zScore: ['<-3SD'],
-        category: 'Severely Underweight',
-    },
-    {
-        zScore: ['-3SD', '>-3SD', '<-2SD'],
-        category: 'Underweight',
-    },
-    {
-        zScore: [
-            '-2SD',
-            '>-2SD',
-            '<-1SD',
-            '-1SD',
-            '>-1SD',
-            '<Median',
-            'Median',
-            '>Median',
-            '<+1SD',
-            '+1SD',
-        ],
-        category: 'Normal',
-    },
-    {
-        zScore: ['>+1SD', '<+2SD', '+2SD', '>+2SD', '<+3SD', '+3SD'],
-        category: 'Risk of Obesity',
-    },
-];
-
-const genderOptions = {
-    male: 'Laki-laki',
-    female: 'Perempuan',
-};
+import {
+    genderOptions,
+    zScoreBBCategory,
+    // zScoreCode,
+    // zScoreIMT5PlusCategory,
+    // zScoreIMTCategory,
+    zScorePTBCategory,
+} from '@/lib/constant';
+import { ZscoreData } from '@/types/zscore';
+import { Head, Link } from '@inertiajs/react';
+import { ArrowLeft } from 'lucide-react';
 
 export default function Result({
     name,
@@ -65,49 +29,55 @@ export default function Result({
     age: number;
     gender: string;
 }) {
-    const zscoreType = age > 23 ? 'TB/U' : 'PB/U';
+    // const zscoreType = age > 23 ? 'TB/U' : 'PB/U';
 
-    const findNearest = (zscoreType: string) => {
-        const zscore = zscoreType === 'BB' ? zscoreBB : zscorePTB;
-        const wh = zscoreType === 'BB' ? weight : height;
-        const scores = Object.values(zscore);
-        const nearest = scores.reduce((prev, curr) => {
-            return Math.abs(curr - wh) < Math.abs(prev - wh) ? curr : prev;
-        });
-        return nearest;
-    };
+    // const findNearest = (zscoreType: string) => {
+    //     const zscore = zscoreType === 'BB' ? zscoreBB : zscorePTB;
+    //     const wh = zscoreType === 'BB' ? weight : height;
+    //     const scores = Object.values(zscore);
+    //     const nearest = scores.reduce((prev, curr) => {
+    //         return Math.abs(curr - wh) < Math.abs(prev - wh) ? curr : prev;
+    //     });
+    //     return nearest;
+    // };
 
-    const getZScoreCategory = (zScore: string) => {
-        const category = zScoreCategory.find((item) =>
-            item.zScore.includes(zScore),
-        );
-        return category?.category || 'Unknown';
-    };
+    // const getZScoreCategory = (
+    //     zScore: string,
+    //     zScoreCategory: ZscoreCategoryType[],
+    // ) => {
+    //     const category = zScoreCategory.find((item) =>
+    //         item.zScore.includes(zScore),
+    //     );
+    //     return category?.category || 'Unknown';
+    // };
 
-    const getZscoreWithSign = (zscoreType: string) => {
-        let zScoreWithSign = '';
-        const nearest = findNearest(zscoreType);
-        const zscoreData = zscoreType === 'BB' ? zscoreBB : zscorePTB;
-        const index = Object.values(zscoreData).indexOf(nearest);
+    // const getZscoreWithSign = (zscoreType: string) => {
+    //     let zScoreWithSign = '';
+    //     const nearest = findNearest(zscoreType);
+    //     const zscoreData = zscoreType === 'BB' ? zscoreBB : zscorePTB;
+    //     const index = Object.values(zscoreData).indexOf(nearest);
 
-        const zScoreIndex = zScore[index];
-        const wh = zscoreType === 'BB' ? weight : height;
-        if (Number(wh) < nearest) {
-            zScoreWithSign = `<${zScoreIndex}`;
-        } else if (Number(wh) > nearest) {
-            zScoreWithSign = `>${zScoreIndex}`;
-        } else {
-            zScoreWithSign = zScoreIndex;
-        }
-        return zScoreWithSign;
-    };
+    //     const zScoreIndex = zScoreCode[index];
+    //     const wh = zscoreType === 'BB' ? weight : height;
+    //     if (Number(wh) < nearest) {
+    //         zScoreWithSign = `<${zScoreIndex}`;
+    //     } else if (Number(wh) > nearest) {
+    //         zScoreWithSign = `>${zScoreIndex}`;
+    //     } else {
+    //         zScoreWithSign = zScoreIndex;
+    //     }
+    //     return zScoreWithSign;
+    // };
 
     return (
         <>
             <Head title="Hasil Perhitungan" />
 
-            <div className="flex min-h-screen flex-col items-center bg-pink-800 p-2 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
-                <header className="mb-6 w-full">
+            <div className="flex min-h-screen flex-col items-center bg-blue-500 p-2 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
+                <header className="my-2 flex w-full items-center gap-4 border-b border-dashed border-white pb-4">
+                    <Link href="/">
+                        <ArrowLeft className="text-white" />
+                    </Link>
                     <h1 className="text-center text-3xl font-bold text-white">
                         Hasil Perhitungan
                     </h1>
@@ -135,7 +105,43 @@ export default function Result({
                     </div>
                 </div>
                 <div className="container flex flex-col justify-between gap-4 opacity-100 transition-opacity duration-750 md:flex-row lg:grow starting:opacity-0">
-                    <Card>
+                    <CardResult
+                        title="Berat Badan menurut Umur (BB/U)"
+                        subtitle="anak usia 0 - 60 bulan"
+                        zScoreCategory={zScoreBBCategory}
+                        zScoreData={zscoreBB}
+                        zScoreType="BB"
+                        weight={weight}
+                        height={height}
+                    />
+                    <CardResult
+                        title="Panjang Badan atau Tinggi Badan menurut Umur (PB/U atau TB/U)"
+                        subtitle="anak usia 0 - 60 bulan"
+                        zScoreCategory={zScorePTBCategory}
+                        zScoreData={zscorePTB}
+                        zScoreType={age > 23 ? 'TB' : 'PB'}
+                        weight={weight}
+                        height={height}
+                    />
+                    {/* <CardResult
+                        title="Berat Badan menurut Panjang Badan atau Tinggi Badan (BB/PB atau BB/TB)"
+                        subtitle="anak usia 0 - 60 bulan"
+                        zScoreCategory={zScorePTBCategory}
+                        zScoreType={age > 23 ? 'BBTB' : 'BBPB'}
+                    />
+                    <CardResult
+                        title="Indeks Massa Tubuh (IMT) menurut Umur (IMT/U)"
+                        subtitle="anak usia 0 - 60 bulan"
+                        zScoreCategory={zScoreIMTCategory}
+                        zScoreType="IMT"
+                    />
+                    <CardResult
+                        title="Indeks Massa Tubuh (IMT) menurut Umur (IMT/U)"
+                        subtitle="anak usia 5 - 18 tahun"
+                        zScoreCategory={zScoreIMT5PlusCategory}
+                        zScoreType="IMT5Plus"
+                    /> */}
+                    {/* <Card>
                         <CardHeader className="border-b border-gray-400 pb-4">
                             <CardTitle>
                                 Berat Badan menurut Umur (BB/U)
@@ -151,7 +157,7 @@ export default function Result({
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell>Berat Terdekat</TableCell>
+                                        <TableCell>Nilai Terdekat</TableCell>
                                         <TableCell className="flex items-center justify-end">
                                             {findNearest('BB')} kg
                                         </TableCell>
@@ -217,7 +223,7 @@ export default function Result({
                                 </TableBody>
                             </Table>
                         </CardContent>
-                    </Card>
+                    </Card> */}
                 </div>
                 <div className="hidden h-14.5 lg:block"></div>
             </div>
