@@ -1,230 +1,155 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import { ChevronLeft, ChevronRight, MoveRight } from 'lucide-react';
+import ZscoreIndex from '@/components/zscore-index';
+// import { ChevronLeft, ChevronRight, MoveRight } from 'lucide-react';
+
+const tableBBData = [
+    {
+        category: ['Berat badan sangat kurang', 'severely underweight'],
+        zScore: ['<', '- 3 SD'],
+    },
+    {
+        category: ['Berat badan kurang', 'underweight'],
+        zScore: ['-3 SD', 'to', '<', '-2 SD'],
+    },
+    {
+        category: ['Berat badan normal'],
+        zScore: ['-2 SD', 'to', '+1 SD'],
+    },
+    {
+        category: ['Risiko Berat badan lebih'],
+        zScore: ['>', '+1 SD'],
+    },
+];
+
+const tablePBData = [
+    {
+        category: ['Sangat pendek', 'severely stunted'],
+        zScore: ['<', '-3 SD'],
+    },
+    {
+        category: ['Pendek', 'stunted'],
+        zScore: ['-3 SD', 'to', '<', '-2 SD'],
+    },
+    {
+        category: ['Normal'],
+        zScore: ['-2 SD', 'to', '+3 SD'],
+    },
+    {
+        category: ['Tinggi'],
+        zScore: ['>', '+3 SD'],
+    },
+];
+
+const tableBBPBData = [
+    {
+        category: ['Gizi buruk', 'severely wasted'],
+        zScore: ['<', '-3 SD'],
+    },
+    {
+        category: ['Gizi kurang', 'wasted'],
+        zScore: ['-3 SD', 'to', '<', '-2 SD'],
+    },
+    {
+        category: ['Gizi baik', 'normal'],
+        zScore: ['-2 SD', 'to', '+1 SD'],
+    },
+    {
+        category: ['Berisiko gizi lebih', 'possible risk of overweight'],
+        zScore: ['>', '+1 SD', 'to', '+2 SD'],
+    },
+    {
+        category: ['Gizi lebih', 'overweight'],
+        zScore: ['>', '+2 SD', 'to', '+3 SD'],
+    },
+    {
+        category: ['Obesitas', 'obese'],
+        zScore: ['>', '+3 SD'],
+    },
+];
+
+const tableIMTData = [
+    {
+        category: ['Gizi buruk', 'severely wasted'],
+        zScore: ['<', '-3 SD'],
+    },
+    {
+        category: ['Gizi kurang', 'wasted'],
+        zScore: ['-3 SD', 'to', '<', '-2 SD'],
+    },
+    {
+        category: ['Gizi baik', 'normal'],
+        zScore: ['-2 SD', 'to', '+1 SD'],
+    },
+    {
+        category: ['Berisiko gizi lebih', 'possible risk of overweight'],
+        zScore: ['>', '+1 SD', 'to', '+2 SD'],
+    },
+    {
+        category: ['Gizi lebih', 'overweight'],
+        zScore: ['>', '+2 SD', 'to', '+3 SD'],
+    },
+    {
+        category: ['Obesitas', 'obese'],
+        zScore: ['>', '+3 SD'],
+    },
+];
+
+const tableIMT5PlusData = [
+    {
+        category: ['Gizi buruk', 'severely thinness'],
+        zScore: ['<', '-3 SD'],
+    },
+    {
+        category: ['Gizi kurang', 'thinness'],
+        zScore: ['-3 SD', 'to', '<', '-2 SD'],
+    },
+    {
+        category: ['Gizi baik', 'normal'],
+        zScore: ['-2 SD', 'to', '+1 SD'],
+    },
+    {
+        category: ['Gizi lebih', 'overweight'],
+        zScore: ['+1 SD', 'to', '+2 SD'],
+    },
+    {
+        category: ['Obesitas', 'obese'],
+        zScore: ['>', '+2 SD'],
+    },
+];
 
 export default function AntropometriTable() {
     return (
         <div>
-            <h1 className="mb-4 border-b border-gray-300 pb-4 text-center text-lg font-bold text-[#0b7285]">
+            <h1 className="mb-4 border-b border-gray-300 pb-4 text-center text-2xl font-bold text-[#0b7285]">
                 Kategori dan Ambang Batas
                 <br />
                 Status Gizi Anak
             </h1>
-            <div className="bg-[#e3fafc] py-4">
-                <h2 className="text-center font-bold text-[#0c8599]">
-                    Berat Badan menurut Umur (BB/U)
-                    <br />
-                    anak usia 0 - 60 bulan
-                </h2>
-                <Table className="mt-6 w-full text-[#0c8599]">
-                    <TableHeader>
-                        <TableRow className="bg-[#c5f6fa]">
-                            <TableHead className="text-[#0b7285]">
-                                Kategori Status Gizi
-                            </TableHead>
-                            <TableHead className="text-right text-[#0b7285]">
-                                Ambang Batas
-                                <br />
-                                (Z-Score)
-                            </TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell>
-                                <p>Berat badan sangat kurang</p>
-                                <p>(severely underweight)</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end">
-                                <ChevronLeft size={16} />
-                                <div>- 3 SD</div>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Berat badan kurang</p>
-                                <p>(underweight)</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end gap-3">
-                                <div className="">- 3 SD</div>
-                                <MoveRight />
-                                <div className="flex items-center gap-1">
-                                    <ChevronLeft size={16} />
-                                    <div>- 2 SD</div>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Berat badan normal</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end gap-3">
-                                <div className="">- 2 SD</div>
-                                <MoveRight />
-                                <p>+ 1 SD</p>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Risiko Berat badan lebih</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end gap-3">
-                                <div className="flex items-center gap-1">
-                                    <ChevronRight size={16} />
-                                    <div>+1 SD</div>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
-
-            <div className="border-t border-dashed border-[#74c0fc] bg-[#e7f5ff] py-4">
-                <h2 className="text-center font-bold text-[#1864ab]">
-                    Panjang Badan atau Tinggi Badan
-                    <br />
-                    menurut Umur
-                    <br />
-                    (PB/U atau TB/U) anak usia 0 - 60 bulan
-                </h2>
-                <Table className="mt-6 w-full text-[#1971c2]">
-                    <TableHeader>
-                        <TableRow className="bg-[#d0ebff]">
-                            <TableHead className="text-[#1971c2]">
-                                Kategori Status Gizi
-                            </TableHead>
-                            <TableHead className="text-right text-[#1971c2]">
-                                Ambang Batas
-                                <br />
-                                (Z-Score)
-                            </TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell>
-                                <p>Berat badan sangat kurang</p>
-                                <p>(severely underweight)</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end">
-                                <ChevronLeft size={16} />
-                                <div>- 3 SD</div>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Berat badan kurang</p>
-                                <p>(underweight)</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end gap-3">
-                                <div className="">- 3 SD</div>
-                                <MoveRight />
-                                <div className="flex items-center gap-1">
-                                    <ChevronLeft size={16} />
-                                    <div>- 2 SD</div>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Berat badan normal</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end gap-3">
-                                <div className="">- 2 SD</div>
-                                <MoveRight />
-                                <p>+ 1 SD</p>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Risiko Berat badan lebih</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end gap-3">
-                                <div className="flex items-center gap-1">
-                                    <ChevronRight size={16} />
-                                    <div>+1 SD</div>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
-
-            <div className="border-t border-dashed border-[#b197fc] bg-[#f3f0ff] py-4">
-                <h2 className="text-center font-bold text-[#5f3dc4]">
-                    Berat Badan menurut Panjang Badan
-                    <br />
-                    atau Tinggi Badan
-                    <br />
-                    (BB/PB atau BB/TB) anak usia 0 - 60 bulan
-                </h2>
-                <Table className="mt-6 w-full text-[#5f3dc4]">
-                    <TableHeader>
-                        <TableRow className="bg-[#e5dbff]">
-                            <TableHead className="text-[#5f3dc4]">
-                                Kategori Status Gizi
-                            </TableHead>
-                            <TableHead className="text-right text-[#5f3dc4]">
-                                Ambang Batas
-                                <br />
-                                (Z-Score)
-                            </TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell>
-                                <p>Berat badan sangat kurang</p>
-                                <p>(severely underweight)</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end">
-                                <ChevronLeft size={16} />
-                                <div>- 3 SD</div>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Berat badan kurang</p>
-                                <p>(underweight)</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end gap-3">
-                                <div className="">- 3 SD</div>
-                                <MoveRight />
-                                <div className="flex items-center gap-1">
-                                    <ChevronLeft size={16} />
-                                    <div>- 2 SD</div>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Berat badan normal</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end gap-3">
-                                <div className="">- 2 SD</div>
-                                <MoveRight />
-                                <p>+ 1 SD</p>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Risiko Berat badan lebih</p>
-                            </TableCell>
-                            <TableCell className="flex items-center justify-end gap-3">
-                                <div className="flex items-center gap-1">
-                                    <ChevronRight size={16} />
-                                    <div>+1 SD</div>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
+            <div className="flex flex-col justify-center gap-4 md:flex-row md:flex-wrap">
+                <ZscoreIndex
+                    title="Berat Badan Menurut Umur (BB/U)"
+                    subtitle="anak usia 0 - 60 bulan"
+                    tableData={tableBBData}
+                />
+                <ZscoreIndex
+                    title="Panjang Badan atau Tinggi Badan menurut Umur (PB/U atau TB/U)"
+                    subtitle="anak usia 0 - 60 bulan"
+                    tableData={tablePBData}
+                />
+                <ZscoreIndex
+                    title="Berat Badan menurut Panjang Badan atau Tinggi Badan (BB/PB atau BB/TB)"
+                    subtitle="anak usia 0 - 60 bulan"
+                    tableData={tableBBPBData}
+                />
+                <ZscoreIndex
+                    title="Indeks Massa Tubuh menurut Umur (IMT/U)"
+                    subtitle="anak usia 0 - 60 bulan"
+                    tableData={tableIMTData}
+                />
+                <ZscoreIndex
+                    title="Indeks Massa Tubuh menurut Umur (IMT/U)"
+                    subtitle="anak usia 5 - 18 tahun"
+                    tableData={tableIMT5PlusData}
+                />
             </div>
         </div>
     );
