@@ -103,7 +103,7 @@ export default function Welcome({
                                 open ? 'block' : 'hidden',
                             )}
                         >
-                            <NavigationMenuList className="flex h-full flex-col items-stretch space-x-6 lg:flex-row">
+                            <NavigationMenuList className="flex h-full w-[300px] flex-col items-stretch gap-4 space-x-6 py-4 lg:flex-row">
                                 <NavigationMenuItem>
                                     <Link href={dashboard()}>Home</Link>
                                 </NavigationMenuItem>

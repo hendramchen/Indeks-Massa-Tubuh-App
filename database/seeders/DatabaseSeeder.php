@@ -20,8 +20,28 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Test User',
                 'password' => 'password',
+                'role' => 'user',
                 'email_verified_at' => now(),
             ]
         );
+
+        $this->call([
+            ZscoreBBMaleSeeder::class,
+            ZscorePBMaleSeeder::class,
+            ZscoreTBMaleSeeder::class,
+            ZscoreBBPBMaleSeeder::class,
+            ZscoreBBTBMaleSeeder::class,
+            ZscoreIMT1MaleSeeder::class,
+            ZscoreIMT2MaleSeeder::class,
+            ZscoreIMT5MaleSeeder::class,
+            ZscoreBBFemaleSeeder::class,
+            ZscorePBFemaleSeeder::class,
+            ZscoreTBFemaleSeeder::class,
+            ZscoreBBPBFemaleSeeder::class,
+            ZscoreBBTBFemaleSeeder::class,
+            ZscoreIMT1FemaleSeeder::class,
+            ZscoreIMT2FemaleSeeder::class,
+            ZscoreIMT5FemaleSeeder::class,
+        ]);
     }
 }

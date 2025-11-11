@@ -14,7 +14,8 @@ return new class extends Migration
     {
         Schema::create('zscores', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('age')->unsigned();
+            $table->tinyInteger('age')->unsigned(); // month
+            $table->tinyInteger('year')->nullable(); // year
             $table->float('min3SD', 3, 2);
             $table->float('min2SD', 3, 2);
             $table->float('min1SD', 3, 2);
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->float('plus1SD', 3, 2);
             $table->float('plus2SD', 3, 2);
             $table->float('plus3SD', 3, 2);
+            $table->float('height', 3, 2)->nullable();
             $table->string('zscore_type');
             $table->enum('gender', ['male', 'female']);
             $table->timestamps();
