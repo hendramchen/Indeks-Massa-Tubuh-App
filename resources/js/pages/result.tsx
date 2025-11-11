@@ -3,9 +3,9 @@ import { Label } from '@/components/ui/label';
 import {
     genderOptions,
     zScoreBBCategory,
-    // zScoreCode,
-    // zScoreIMT5PlusCategory,
-    // zScoreIMTCategory,
+    zScoreBBPBCategory,
+    zScoreIMT5PlusCategory,
+    zScoreIMTCategory,
     zScorePTBCategory,
 } from '@/lib/constant';
 import { ZscoreData } from '@/types/zscore';
@@ -16,17 +16,27 @@ export default function Result({
     name,
     zscoreBB,
     zscorePTB,
+    zscoreBBPB,
+    zscoreIMT,
+    zscoreIMT5,
     weight,
     height,
     age,
+    year,
+    month,
     gender,
 }: {
     name: string;
     zscoreBB: ZscoreData;
     zscorePTB: ZscoreData;
+    zscoreBBPB: ZscoreData;
+    zscoreIMT: ZscoreData;
+    zscoreIMT5: ZscoreData;
     weight: number;
     height: number;
     age: number;
+    year: number;
+    month: number;
     gender: string;
 }) {
     return (
@@ -59,7 +69,9 @@ export default function Result({
                 <div className="mb-6 flex w-full gap-4 text-white">
                     <div className="my-4 flex w-1/2 flex-col gap-1">
                         <Label className="font-bold">Umur</Label>
-                        <p className="text-2xl">{age} bulan</p>
+                        <p className="text-2xl">
+                            {year ? `${year}th ${month}bln` : `${age} bulan`}
+                        </p>
                     </div>
                     <div className="my-4 flex w-1/2 flex-col gap-1">
                         <Label className="font-bold">Jenis Kelamin</Label>
@@ -69,42 +81,56 @@ export default function Result({
                     </div>
                 </div>
                 <div className="container flex flex-col justify-between gap-4 opacity-100 transition-opacity duration-750 md:flex-row lg:grow starting:opacity-0">
-                    <CardResult
-                        title="Berat Badan menurut Umur (BB/U)"
-                        subtitle="anak usia 0 - 60 bulan"
-                        zScoreCategory={zScoreBBCategory}
-                        zScoreData={zscoreBB}
-                        zScoreType="BB"
-                        weight={weight}
-                        height={height}
-                    />
-                    <CardResult
-                        title="Panjang Badan atau Tinggi Badan menurut Umur (PB/U atau TB/U)"
-                        subtitle="anak usia 0 - 60 bulan"
-                        zScoreCategory={zScorePTBCategory}
-                        zScoreData={zscorePTB}
-                        zScoreType={age > 23 ? 'TB' : 'PB'}
-                        weight={weight}
-                        height={height}
-                    />
-                    {/* <CardResult
-                        title="Berat Badan menurut Panjang Badan atau Tinggi Badan (BB/PB atau BB/TB)"
-                        subtitle="anak usia 0 - 60 bulan"
-                        zScoreCategory={zScorePTBCategory}
-                        zScoreType={age > 23 ? 'BBTB' : 'BBPB'}
-                    />
-                    <CardResult
-                        title="Indeks Massa Tubuh (IMT) menurut Umur (IMT/U)"
-                        subtitle="anak usia 0 - 60 bulan"
-                        zScoreCategory={zScoreIMTCategory}
-                        zScoreType="IMT"
-                    />
-                    <CardResult
-                        title="Indeks Massa Tubuh (IMT) menurut Umur (IMT/U)"
-                        subtitle="anak usia 5 - 18 tahun"
-                        zScoreCategory={zScoreIMT5PlusCategory}
-                        zScoreType="IMT5Plus"
-                    /> */}
+                    {year ? (
+                        <CardResult
+                            title="Indeks Massa Tubuh (IMT) menurut Umur (IMT/U)"
+                            subtitle="anak usia 5 - 18 tahun"
+                            zScoreCategory={zScoreIMT5PlusCategory}
+                            zScoreData={zscoreIMT5}
+                            zScoreType="IMT5Plus"
+                            weight={weight}
+                            height={height}
+                        />
+                    ) : (
+                        <>
+                            <CardResult
+                                title="Berat Badan menurut Umur (BB/U)"
+                                subtitle="anak usia 0 - 60 bulan"
+                                zScoreCategory={zScoreBBCategory}
+                                zScoreData={zscoreBB}
+                                zScoreType="BB"
+                                weight={weight}
+                                height={height}
+                            />
+                            <CardResult
+                                title="Panjang Badan atau Tinggi Badan menurut Umur (PB/U atau TB/U)"
+                                subtitle="anak usia 0 - 60 bulan"
+                                zScoreCategory={zScorePTBCategory}
+                                zScoreData={zscorePTB}
+                                zScoreType={age > 23 ? 'TB' : 'PB'}
+                                weight={weight}
+                                height={height}
+                            />
+                            <CardResult
+                                title="Berat Badan menurut Panjang Badan atau Tinggi Badan (BB/PB atau BB/TB)"
+                                subtitle="anak usia 0 - 60 bulan"
+                                zScoreCategory={zScoreBBPBCategory}
+                                zScoreData={zscoreBBPB}
+                                zScoreType={age > 23 ? 'BBTB' : 'BBPB'}
+                                weight={weight}
+                                height={height}
+                            />
+                            <CardResult
+                                title="Indeks Massa Tubuh (IMT) menurut Umur (IMT/U)"
+                                subtitle="anak usia 0 - 60 bulan"
+                                zScoreCategory={zScoreIMTCategory}
+                                zScoreData={zscoreIMT}
+                                zScoreType="IMT"
+                                weight={weight}
+                                height={height}
+                            />
+                        </>
+                    )}
                 </div>
                 <div className="my-4 flex w-full justify-end gap-2 pt-6">
                     <Link

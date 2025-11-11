@@ -6,7 +6,12 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { findNearest, getZScoreCategory, getZscoreWithSign } from '@/lib/utils';
+import {
+    findNearest,
+    getComparedValue,
+    getZScoreCategory,
+    getZscoreWithSign,
+} from '@/lib/utils';
 import type {
     ZscoreCategory as ZscoreCategoryType,
     ZscoreData,
@@ -29,11 +34,12 @@ export default function CardResult({
     weight: number;
     height: number;
 }) {
-    const wh = zScoreType === 'BB' ? weight : height;
+    if (!zScoreData) return null;
+    const comparedValue = getComparedValue(zScoreType, weight, height);
     const satuan = zScoreType === 'BB' ? 'kg' : 'cm';
-    const nearest = findNearest(zScoreData, wh);
+    const nearest = findNearest(zScoreData, comparedValue);
     const category = getZScoreCategory(
-        getZscoreWithSign(nearest, wh, zScoreData),
+        getZscoreWithSign(nearest, comparedValue, zScoreData),
         zScoreCategory,
     );
     const data = [
@@ -43,7 +49,7 @@ export default function CardResult({
         },
         {
             label: 'Z-Score',
-            value: `${getZscoreWithSign(nearest, wh, zScoreData)}`,
+            value: `${getZscoreWithSign(nearest, comparedValue, zScoreData)}`,
         },
         {
             label: 'Kategori',

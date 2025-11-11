@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Form } from '@inertiajs/react';
 import { useState } from 'react';
 import {
@@ -31,6 +32,9 @@ export function BMICalculator() {
     const [gender, setGender] = useState<'male' | 'female'>('male');
     const [age, setAge] = useState<string>('');
     const [name, setName] = useState<string>('');
+    const [ageGroup, setAgeGroup] = useState<'toddler' | 'kid'>('toddler');
+    const [year, setYear] = useState<string>('');
+    const [month, setMonth] = useState<string>('');
     const [result, setResult] = useState<BMIResult | null>(null);
 
     // const calculateBMI = () => {
@@ -117,7 +121,8 @@ export function BMICalculator() {
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                             min="1"
-                            max="300"
+                            max="200"
+                            step="0.1"
                         />
                     </div>
 
@@ -137,18 +142,76 @@ export function BMICalculator() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="age">Umur (bulan) 0 - 60</Label>
-                        <Input
-                            id="age"
-                            name="age"
-                            type="number"
-                            placeholder="Masukkan umur dalam bulan"
-                            value={age}
-                            onChange={(e) => setAge(e.target.value)}
-                            min="0"
-                            max="60"
-                        />
+                        <RadioGroup
+                            defaultValue="toddler"
+                            value={ageGroup}
+                            onValueChange={(value) =>
+                                setAgeGroup(value as 'toddler' | 'kid')
+                            }
+                        >
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="toddler" id="toddler" />
+                                <Label htmlFor="toddler">
+                                    Anak umur 0 - 60 bulan
+                                </Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="kid" id="kid" />
+                                <Label htmlFor="kid">
+                                    Anak umur 5 tahun - 18 tahun
+                                </Label>
+                            </div>
+                        </RadioGroup>
                     </div>
+
+                    {ageGroup === 'toddler' && (
+                        <div className="space-y-2">
+                            <Label htmlFor="age">Umur (bulan) 0 - 60</Label>
+                            <Input
+                                id="age"
+                                name="age"
+                                type="number"
+                                placeholder="Masukkan umur dalam bulan"
+                                value={age}
+                                onChange={(e) => setAge(e.target.value)}
+                                min="0"
+                                max="60"
+                            />
+                        </div>
+                    )}
+
+                    {ageGroup === 'kid' && (
+                        <div className="flex gap-2 space-y-2">
+                            <div className="flex-1">
+                                <Label htmlFor="year">
+                                    Umur (tahun) 5 - 18
+                                </Label>
+                                <Input
+                                    id="year"
+                                    name="year"
+                                    type="number"
+                                    value={year}
+                                    onChange={(e) => setYear(e.target.value)}
+                                    min="5"
+                                    max="18"
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <Label htmlFor="month">
+                                    Umur (bulan) 0 - 11
+                                </Label>
+                                <Input
+                                    id="month"
+                                    name="month"
+                                    type="number"
+                                    value={month}
+                                    onChange={(e) => setMonth(e.target.value)}
+                                    min="0"
+                                    max="11"
+                                />
+                            </div>
+                        </div>
+                    )}
 
                     <div className="space-y-2">
                         <Label htmlFor="gender">Jenis Kelamin</Label>

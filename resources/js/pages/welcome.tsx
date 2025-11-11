@@ -105,13 +105,13 @@ export default function Welcome({
                         >
                             <NavigationMenuList className="flex h-full w-[300px] flex-col items-stretch gap-4 space-x-6 py-4 lg:flex-row">
                                 <NavigationMenuItem>
-                                    <Link href={dashboard()}>Home</Link>
+                                    <Link href="/">Tabel ZScore</Link>
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
-                                    <Link href={dashboard()}>Tabel</Link>
+                                    <Link href="/">Tercatat</Link>
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
-                                    <Link href={dashboard()}>About</Link>
+                                    <Link href="/">Tentang</Link>
                                 </NavigationMenuItem>
                             </NavigationMenuList>
                         </NavigationMenu>

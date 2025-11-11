@@ -51,9 +51,10 @@ class ZscoreIMT2FemaleSeeder extends Seeder
             [11.7, 12.7, 13.9, 15.3, 16.9, 18.8, 21.0],
             [11.6, 12.7, 13.9, 15.3, 16.9, 18.8, 21.1]
         ];
+        $ageInit = 24;
         foreach ($dataIMT2Female as $index => $row) {
             DB::table('zscores')->insert([
-                'age' => $index,
+                'age' => $ageInit + $index,
                 'min3SD' => $row[0],
                 'min2SD' => $row[1],
                 'min1SD' => $row[2],

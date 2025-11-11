@@ -22,7 +22,36 @@ export function resolveUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
 }
 
+export const getComparedValue = (
+    zScoreType: string,
+    weight: number,
+    height: number,
+): number => {
+    switch (zScoreType) {
+        case 'BB':
+            return weight;
+        case 'PB':
+            return height;
+        case 'TB':
+            return height;
+        case 'BBPB':
+            return weight;
+        case 'BBTB':
+            return weight;
+        case 'IMT': {
+            const heightInMeters = height / 100;
+            return weight / (heightInMeters * heightInMeters);
+        }
+        case 'IMT5Plus': {
+            const heightInMeters = height / 100;
+            return weight / (heightInMeters * heightInMeters);
+        }
+    }
+    return 0;
+};
+
 export const findNearest = (zscore: ZscoreData, wh: number): number => {
+    if (!zscore) return 0;
     const scores = Object.values(zscore);
     const nearest: number = scores.reduce((prev, curr) => {
         return Math.abs(curr - wh) < Math.abs(prev - wh) ? curr : prev;
