@@ -96,7 +96,7 @@ export default function Header({
                                 <Link href={tabelZscore()}>Tabel ZScore</Link>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <Link href="/">Tercatat</Link>
+                                <Link href="/imt-result">Tercatat</Link>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
                                 <Link href="/">Tentang</Link>

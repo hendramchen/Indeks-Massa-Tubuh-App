@@ -10,9 +10,11 @@ import {
     zScoreIMTCategory,
     zScorePTBCategory,
 } from '@/lib/constant';
+import { SharedData } from '@/types';
 import { ZscoreData } from '@/types/zscore';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
 import ResultForm from './result-form';
 
 export default function Result({
@@ -42,6 +44,20 @@ export default function Result({
     month: number;
     gender: string;
 }) {
+    const [weightNearest, setWeightNearest] = useState<string>('');
+    const [weightZscore, setWeightZscore] = useState<string>('');
+    const [weightCategory, setWeightCategory] = useState<string>('');
+    const [heightNearest, setHeightNearest] = useState<string>('');
+    const [heightZscore, setHeightZscore] = useState<string>('');
+    const [heightCategory, setHeightCategory] = useState<string>('');
+    const [whNearest, setWhNearest] = useState<string>('');
+    const [whZscore, setWhZscore] = useState<string>('');
+    const [whCategory, setWhCategory] = useState<string>('');
+    const [imtNearest, setImtNearest] = useState<string>('');
+    const [imtZscore, setImtZscore] = useState<string>('');
+    const [imtCategory, setImtCategory] = useState<string>('');
+
+    const { auth } = usePage<SharedData>().props;
     return (
         <>
             <Head title="Hasil Perhitungan" />
@@ -93,6 +109,18 @@ export default function Result({
                             zScoreType="IMT5Plus"
                             weight={weight}
                             height={height}
+                            setWeightNearest={setWeightNearest}
+                            setWeightZscore={setWeightZscore}
+                            setWeightCategory={setWeightCategory}
+                            setHeightNearest={setHeightNearest}
+                            setHeightZscore={setHeightZscore}
+                            setHeightCategory={setHeightCategory}
+                            setWhNearest={setWhNearest}
+                            setWhZscore={setWhZscore}
+                            setWhCategory={setWhCategory}
+                            setImtNearest={setImtNearest}
+                            setImtZscore={setImtZscore}
+                            setImtCategory={setImtCategory}
                         />
                     ) : (
                         <>
@@ -104,6 +132,18 @@ export default function Result({
                                 zScoreType="BB"
                                 weight={weight}
                                 height={height}
+                                setWeightNearest={setWeightNearest}
+                                setWeightZscore={setWeightZscore}
+                                setWeightCategory={setWeightCategory}
+                                setHeightNearest={setHeightNearest}
+                                setHeightZscore={setHeightZscore}
+                                setHeightCategory={setHeightCategory}
+                                setWhNearest={setWhNearest}
+                                setWhZscore={setWhZscore}
+                                setWhCategory={setWhCategory}
+                                setImtNearest={setImtNearest}
+                                setImtZscore={setImtZscore}
+                                setImtCategory={setImtCategory}
                             />
                             <CardResult
                                 title="Panjang Badan atau Tinggi Badan menurut Umur (PB/U atau TB/U)"
@@ -113,6 +153,18 @@ export default function Result({
                                 zScoreType={age > 23 ? 'TB' : 'PB'}
                                 weight={weight}
                                 height={height}
+                                setWeightNearest={setWeightNearest}
+                                setWeightZscore={setWeightZscore}
+                                setWeightCategory={setWeightCategory}
+                                setHeightNearest={setHeightNearest}
+                                setHeightZscore={setHeightZscore}
+                                setHeightCategory={setHeightCategory}
+                                setWhNearest={setWhNearest}
+                                setWhZscore={setWhZscore}
+                                setWhCategory={setWhCategory}
+                                setImtNearest={setImtNearest}
+                                setImtZscore={setImtZscore}
+                                setImtCategory={setImtCategory}
                             />
                             <CardResult
                                 title="Berat Badan menurut Panjang Badan atau Tinggi Badan (BB/PB atau BB/TB)"
@@ -122,6 +174,18 @@ export default function Result({
                                 zScoreType={age > 23 ? 'BBTB' : 'BBPB'}
                                 weight={weight}
                                 height={height}
+                                setWeightNearest={setWeightNearest}
+                                setWeightZscore={setWeightZscore}
+                                setWeightCategory={setWeightCategory}
+                                setHeightNearest={setHeightNearest}
+                                setHeightZscore={setHeightZscore}
+                                setHeightCategory={setHeightCategory}
+                                setWhNearest={setWhNearest}
+                                setWhZscore={setWhZscore}
+                                setWhCategory={setWhCategory}
+                                setImtNearest={setImtNearest}
+                                setImtZscore={setImtZscore}
+                                setImtCategory={setImtCategory}
                             />
                             <CardResult
                                 title="Indeks Massa Tubuh (IMT) menurut Umur (IMT/U)"
@@ -131,10 +195,43 @@ export default function Result({
                                 zScoreType="IMT"
                                 weight={weight}
                                 height={height}
+                                setWeightNearest={setWeightNearest}
+                                setWeightZscore={setWeightZscore}
+                                setWeightCategory={setWeightCategory}
+                                setHeightNearest={setHeightNearest}
+                                setHeightZscore={setHeightZscore}
+                                setHeightCategory={setHeightCategory}
+                                setWhNearest={setWhNearest}
+                                setWhZscore={setWhZscore}
+                                setWhCategory={setWhCategory}
+                                setImtNearest={setImtNearest}
+                                setImtZscore={setImtZscore}
+                                setImtCategory={setImtCategory}
                             />
                         </>
                     )}
-                    <ResultForm />
+                    {auth.user && (
+                        <ResultForm
+                            childName={name}
+                            gender={gender}
+                            age={age}
+                            year={year}
+                            weight={weight}
+                            height={height}
+                            weightNearest={weightNearest}
+                            weightZscore={weightZscore}
+                            weightCategory={weightCategory}
+                            heightNearest={heightNearest}
+                            heightZscore={heightZscore}
+                            heightCategory={heightCategory}
+                            whNearest={whNearest}
+                            whZscore={whZscore}
+                            whCategory={whCategory}
+                            imtNearest={imtNearest}
+                            imtZscore={imtZscore}
+                            imtCategory={imtCategory}
+                        />
+                    )}
                 </div>
                 <div className="my-4">
                     <Link

@@ -13,22 +13,30 @@ return new class extends Migration
     {
         Schema::create('imt_results', function (Blueprint $table) {
             $table->id();
-            $table->string('father_name')->nullable();
-            $table->string('mother_name')->nullable();
+            $table->string('parent_name')->nullable();
             $table->string('child_name');
-            $table->tinyInteger('age')->unsigned();
             $table->enum('gender', ['male', 'female']);
+            $table->tinyInteger('age')->unsigned(); // month
+            $table->tinyInteger('year')->nullable(); // year
             $table->float('weight', 3, 2);
             $table->float('height', 3, 2);
-            $table->float('weight_by_age', 3, 2);
-            $table->float('height_by_age', 3, 2);
-            $table->float('weight_by_height', 3, 2);
-            $table->float('imt_by_age', 3, 2);
-            $table->string('desa')->nullable();
-            $table->string('banjar')->nullable();
-            $table->string('kecamatan')->nullable();
-            $table->string('kabupaten')->nullable();
-            $table->string('provinsi')->nullable();
+            $table->string('weight_nearest')->nullable();
+            $table->string('weight_zscore')->nullable();
+            $table->string('weight_category')->nullable();
+            $table->string('height_nearest')->nullable();
+            $table->string('height_zscore')->nullable();
+            $table->string('height_category')->nullable();
+            $table->string('wh_nearest')->nullable();
+            $table->string('wh_zscore')->nullable();
+            $table->string('wh_category')->nullable();
+            $table->string('imt_nearest')->nullable();
+            $table->string('imt_zscore')->nullable();
+            $table->string('imt_category')->nullable();
+            $table->string('province')->nullable();
+            $table->string('city')->nullable();
+            $table->string('district')->nullable();
+            $table->string('address')->nullable();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

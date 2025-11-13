@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\CalculatorController;
+use App\Http\Controllers\ImtResultController;
 use App\Http\Controllers\ZscoreController;
 
 Route::get('/', function () {
@@ -14,6 +15,8 @@ Route::get('/', function () {
 
 Route::post('/result', [CalculatorController::class, 'result'])->name('result');
 Route::get('/tabel-zscore', [ZscoreController::class, 'index'])->name('tabel-zscore');
+Route::post('/imt-result', [ImtResultController::class, 'store'])->name('imt-result.store');
+Route::get('/imt-result', [ImtResultController::class, 'index'])->name('imt-result.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

@@ -29,6 +29,7 @@ class CalculatorController extends Controller
             if ($year === '5' && $month === '0') {
                 $month = 1;
             }
+            $age = $month;
             // anak umur 5th sampai dengan 18 tahun
             $zscoreIMT5 = Zscore::select('min3SD', 'min2SD', 'min1SD', 'median', 'plus1SD', 'plus2SD', 'plus3SD')
             ->where('age', $month)
