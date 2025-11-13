@@ -1,4 +1,6 @@
 import CardResult from '@/components/card-result';
+import Footer from '@/components/footer';
+import Header from '@/components/header';
 import { Label } from '@/components/ui/label';
 import {
     genderOptions,
@@ -11,6 +13,7 @@ import {
 import { ZscoreData } from '@/types/zscore';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
+import ResultForm from './result-form';
 
 export default function Result({
     name,
@@ -42,7 +45,7 @@ export default function Result({
     return (
         <>
             <Head title="Hasil Perhitungan" />
-
+            <Header />
             <div className="flex min-h-screen flex-col bg-gradient-to-r from-[#03a79f] to-[#016c82] p-2 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
                 <header className="my-2 flex w-full items-center gap-6 border-b border-[#2be1d8] pb-4">
                     <Link href="/">
@@ -131,23 +134,17 @@ export default function Result({
                             />
                         </>
                     )}
+                    <ResultForm />
                 </div>
-                <div className="my-4 flex w-full justify-end gap-2 pt-6">
+                <div className="my-4">
                     <Link
                         href="/"
-                        className="flex flex-1 items-center gap-2 rounded-lg bg-white px-6 py-2 font-semibold"
+                        className="flex items-center gap-2 rounded-lg bg-white px-6 py-2 font-semibold"
                     >
                         <ArrowLeft className="text-gray-500" /> Kembali
                     </Link>
-                    <button className="flex-1 rounded-lg bg-[#01586a] px-6 py-2 font-semibold text-white">
-                        Simpan
-                    </button>
                 </div>
-                <footer className="w-full bg-gradient-to-r from-[#03a79f] to-[#016c82] px-4 py-4 text-white">
-                    <p className="text-center">
-                        © 2025 Sigizi. All rights reserved.
-                    </p>
-                </footer>
+                <Footer />
             </div>
         </>
     );

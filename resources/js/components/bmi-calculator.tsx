@@ -37,43 +37,6 @@ export function BMICalculator() {
     const [month, setMonth] = useState<string>('');
     const [result, setResult] = useState<BMIResult | null>(null);
 
-    // const calculateBMI = () => {
-    //     const heightInMeters = parseFloat(height) / 100; // Convert cm to meters
-    //     const weightInKg = parseFloat(weight);
-
-    //     if (heightInMeters > 0 && weightInKg > 0) {
-    //         const bmi = weightInKg / (heightInMeters * heightInMeters);
-    //         const roundedBMI = Math.round(bmi * 10) / 10;
-
-    //         let category: string;
-    //         let categoryColor:
-    //             | 'default'
-    //             | 'secondary'
-    //             | 'destructive'
-    //             | 'outline';
-
-    //         if (bmi < 18.5) {
-    //             category = 'Underweight';
-    //             categoryColor = 'outline';
-    //         } else if (bmi >= 18.5 && bmi < 25) {
-    //             category = 'Normal weight';
-    //             categoryColor = 'secondary';
-    //         } else if (bmi >= 25 && bmi < 30) {
-    //             category = 'Overweight';
-    //             categoryColor = 'default';
-    //         } else {
-    //             category = 'Obese';
-    //             categoryColor = 'destructive';
-    //         }
-
-    //         setResult({
-    //             bmi: roundedBMI,
-    //             category,
-    //             categoryColor,
-    //         });
-    //     }
-    // };
-
     const resetCalculator = () => {
         setHeight('');
         setWeight('');

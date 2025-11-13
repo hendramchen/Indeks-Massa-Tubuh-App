@@ -12,3 +12,12 @@ export interface ZscoreData {
     plus2SD: number;
     plus3SD: number;
 }
+
+export interface ZscoreItem extends ZscoreData {
+    id: number;
+    age: number;
+    height: number;
+    year: number;
+    zscoreType: string;
+    gender: string;
+}
