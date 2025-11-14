@@ -2,6 +2,12 @@ import Footer from '@/components/footer';
 import Header from '@/components/header';
 import { Button } from '@/components/ui/button';
 import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+} from '@/components/ui/card';
+import {
     Select,
     SelectContent,
     SelectItem,
@@ -18,6 +24,12 @@ import {
 } from '@/components/ui/table';
 import { ImtResult } from '@/types/zscore';
 import { Head, Link } from '@inertiajs/react';
+import {
+    ChevronFirstIcon,
+    ChevronLastIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+} from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 interface HistoryProps {
@@ -125,9 +137,14 @@ export default function History({ imtResult }: HistoryProps) {
                 <h1 className="mb-6 text-2xl font-bold">Riwayat Perhitungan</h1>
 
                 {/* Filter Section */}
-                <div className="mb-6 rounded-lg border bg-gray-50 p-4">
-                    <h2 className="mb-4 text-lg font-semibold">Filter Data</h2>
-                    <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-5">
+                <Card className="mb-6 rounded-lg border p-4">
+                    <CardHeader>
+                        <h2 className="mb-4 text-lg font-semibold">
+                            Filter Data
+                        </h2>
+                    </CardHeader>
+
+                    <CardContent className="grid grid-cols-1 items-end gap-4 md:grid-cols-5">
                         <div>
                             <label className="mb-2 block text-sm font-medium">
                                 Kabupaten/Kota
@@ -235,10 +252,10 @@ export default function History({ imtResult }: HistoryProps) {
                                 Reset Filter
                             </Button>
                         </div>
-                    </div>
+                    </CardContent>
 
                     {/* Results info */}
-                    <div className="mt-4 text-sm text-gray-600">
+                    <CardFooter className="mt-4 text-sm text-gray-600">
                         Menampilkan {paginatedData.length} dari{' '}
                         {filteredData.length} data
                         {filteredData.length !== imtResult.length && (
@@ -247,8 +264,8 @@ export default function History({ imtResult }: HistoryProps) {
                                 (difilter dari {imtResult.length} total data)
                             </span>
                         )}
-                    </div>
-                </div>
+                    </CardFooter>
+                </Card>
 
                 <Table className="w-full">
                     <TableHeader>
@@ -327,7 +344,7 @@ export default function History({ imtResult }: HistoryProps) {
                                     <TableCell className="border border-gray-300">
                                         <Link
                                             href={`/imt-result/${item.id}`}
-                                            className="cursor-pointer font-medium text-blue-600 hover:text-blue-800 hover:underline"
+                                            className="cursor-pointer font-medium text-[#035f65] hover:text-[#024246] hover:underline"
                                         >
                                             {item.child_name}
                                         </Link>
@@ -390,7 +407,7 @@ export default function History({ imtResult }: HistoryProps) {
 
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
-                    <div className="mt-6 flex items-center justify-between">
+                    <div className="mt-6 flex flex-col items-center justify-between gap-4 overflow-x-auto">
                         <div className="text-sm text-gray-600">
                             Halaman {currentPage} dari {totalPages}
                         </div>
@@ -401,7 +418,7 @@ export default function History({ imtResult }: HistoryProps) {
                                 variant="outline"
                                 size="sm"
                             >
-                                Pertama
+                                <ChevronFirstIcon />
                             </Button>
                             <Button
                                 onClick={() => setCurrentPage(currentPage - 1)}
@@ -409,7 +426,7 @@ export default function History({ imtResult }: HistoryProps) {
                                 variant="outline"
                                 size="sm"
                             >
-                                Sebelumnya
+                                <ChevronLeftIcon />
                             </Button>
 
                             {/* Page numbers */}
@@ -458,7 +475,7 @@ export default function History({ imtResult }: HistoryProps) {
                                 variant="outline"
                                 size="sm"
                             >
-                                Selanjutnya
+                                <ChevronRightIcon />
                             </Button>
                             <Button
                                 onClick={() => setCurrentPage(totalPages)}
@@ -466,7 +483,7 @@ export default function History({ imtResult }: HistoryProps) {
                                 variant="outline"
                                 size="sm"
                             >
-                                Terakhir
+                                <ChevronLastIcon />
                             </Button>
                         </div>
                     </div>

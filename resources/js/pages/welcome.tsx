@@ -20,7 +20,7 @@ export default function Welcome({
                 />
             </Head>
             <Header canRegister={canRegister} />
-            <div className="flex flex-col items-center bg-[#FDFDFC] p-2 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
+            <div className="flex flex-col items-center bg-[#FDFDFC] p-2 text-[#1b1b18] lg:justify-center lg:p-8">
                 <div className="container flex flex-col justify-between gap-4 opacity-100 transition-opacity duration-750 md:flex-row lg:grow starting:opacity-0">
                     <BMICalculator />
                     <div className="flex-1">

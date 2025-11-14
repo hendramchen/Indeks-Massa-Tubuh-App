@@ -1,3 +1,4 @@
+import AppearanceTabs from '@/components/appearance-tabs';
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -27,7 +28,7 @@ export default function Header({
                     <Link href="/" className="text-2xl text-white">
                         Sigizi
                     </Link>
-                    <div className="flex items-center lg:order-2">
+                    <div className="flex items-center gap-1 lg:order-2">
                         {auth.user ? (
                             <Link
                                 href={logout()}
@@ -53,6 +54,7 @@ export default function Header({
                                 )}
                             </>
                         )}
+                        <AppearanceTabs />
                         <button
                             onClick={toggleOpen}
                             type="button"

@@ -21,9 +21,15 @@ class ImtResultController extends Controller
     }
 
     public function show($id) {
-        $imtResult = ImtResult::where('user_id', auth()->id())
+        $user = auth()->user();
+        if ($user->role == 'admin') {
+            $imtResult = ImtResult::where('id', $id)
+                            ->firstOrFail();
+        } else {
+            $imtResult = ImtResult::where('user_id', auth()->id())
                             ->where('id', $id)
                             ->firstOrFail();
+        }
         
         return Inertia::render('history/show', [
             'imtResult' => $imtResult,

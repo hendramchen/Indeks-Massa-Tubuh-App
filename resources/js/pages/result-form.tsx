@@ -184,9 +184,6 @@ export default function ResultForm({
                     </div>
                 </CardContent>
                 <CardFooter className="flex gap-2">
-                    <Button variant="outline" className="flex-1">
-                        Batal
-                    </Button>
                     <Button className="flex-1" type="submit">
                         Simpan
                     </Button>
