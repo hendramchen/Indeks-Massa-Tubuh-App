@@ -1,5 +1,13 @@
 import Footer from '@/components/footer';
 import Header from '@/components/header';
+import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -8,17 +16,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
 import { ImtResult } from '@/types/zscore';
-import { Head } from '@inertiajs/react';
-import { useState, useMemo } from 'react';
+import { Head, Link } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
 
 interface HistoryProps {
     imtResult: ImtResult[];
@@ -29,33 +29,46 @@ export default function History({ imtResult }: HistoryProps) {
     const [cityFilter, setCityFilter] = useState<string>('all');
     const [ageFilter, setAgeFilter] = useState<string>('all');
     const [genderFilter, setGenderFilter] = useState<string>('all');
-    
+
     // Pagination states
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 10;
 
     // Get unique values for filter options
     const uniqueCities = useMemo(() => {
-        const cities = [...new Set(imtResult.map(item => item.city))].filter(Boolean);
+        const cities = [...new Set(imtResult.map((item) => item.city))].filter(
+            Boolean,
+        );
         return cities.sort();
     }, [imtResult]);
 
     const uniqueAges = useMemo(() => {
-        const ages = [...new Set(imtResult.map(item => item.age))].filter(Boolean);
+        const ages = [...new Set(imtResult.map((item) => item.age))].filter(
+            Boolean,
+        );
         return ages.sort((a, b) => a - b);
     }, [imtResult]);
 
     const uniqueGenders = useMemo(() => {
-        const genders = [...new Set(imtResult.map(item => item.gender))].filter(Boolean);
+        const genders = [
+            ...new Set(imtResult.map((item) => item.gender)),
+        ].filter(Boolean);
         return genders.sort();
     }, [imtResult]);
 
     // Filter data based on selected filters
     const filteredData = useMemo(() => {
-        return imtResult.filter(item => {
-            const matchesCity = cityFilter === 'all' || !cityFilter || item.city === cityFilter;
-            const matchesAge = ageFilter === 'all' || !ageFilter || item.age.toString() === ageFilter;
-            const matchesGender = genderFilter === 'all' || !genderFilter || item.gender === genderFilter;
+        return imtResult.filter((item) => {
+            const matchesCity =
+                cityFilter === 'all' || !cityFilter || item.city === cityFilter;
+            const matchesAge =
+                ageFilter === 'all' ||
+                !ageFilter ||
+                item.age.toString() === ageFilter;
+            const matchesGender =
+                genderFilter === 'all' ||
+                !genderFilter ||
+                item.gender === genderFilter;
             return matchesCity && matchesAge && matchesGender;
         });
     }, [imtResult, cityFilter, ageFilter, genderFilter]);
@@ -98,21 +111,30 @@ export default function History({ imtResult }: HistoryProps) {
         <div>
             <Head title="Riwayat Perhitungan" />
             <Header />
-            <div className="p-6">
-                <h1 className="text-2xl font-bold mb-6">Riwayat Perhitungan</h1>
-                
+            <div className="px-1 py-4 md:px-4">
+                <h1 className="mb-6 text-2xl font-bold">Riwayat Perhitungan</h1>
+
                 {/* Filter Section */}
-                <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
-                    <h2 className="text-lg font-semibold mb-4">Filter Data</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div className="mb-6 rounded-lg border bg-gray-50 p-4">
+                    <h2 className="mb-4 text-lg font-semibold">Filter Data</h2>
+                    <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-4">
                         <div>
-                            <label className="block text-sm font-medium mb-2">Kabupaten/Kota</label>
-                            <Select value={cityFilter} onValueChange={(value) => handleFilterChange('city', value)}>
+                            <label className="mb-2 block text-sm font-medium">
+                                Kabupaten/Kota
+                            </label>
+                            <Select
+                                value={cityFilter}
+                                onValueChange={(value) =>
+                                    handleFilterChange('city', value)
+                                }
+                            >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Semua Kota" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">Semua Kota</SelectItem>
+                                    <SelectItem value="all">
+                                        Semua Kota
+                                    </SelectItem>
                                     {uniqueCities.map((city) => (
                                         <SelectItem key={city} value={city}>
                                             {city}
@@ -121,32 +143,53 @@ export default function History({ imtResult }: HistoryProps) {
                                 </SelectContent>
                             </Select>
                         </div>
-                        
+
                         <div>
-                            <label className="block text-sm font-medium mb-2">Umur</label>
-                            <Select value={ageFilter} onValueChange={(value) => handleFilterChange('age', value)}>
+                            <label className="mb-2 block text-sm font-medium">
+                                Umur
+                            </label>
+                            <Select
+                                value={ageFilter}
+                                onValueChange={(value) =>
+                                    handleFilterChange('age', value)
+                                }
+                            >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Semua Umur" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">Semua Umur</SelectItem>
+                                    <SelectItem value="all">
+                                        Semua Umur
+                                    </SelectItem>
                                     {uniqueAges.map((age) => (
-                                        <SelectItem key={age} value={age.toString()}>
+                                        <SelectItem
+                                            key={age}
+                                            value={age.toString()}
+                                        >
                                             {age} bulan
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
                         </div>
-                        
+
                         <div>
-                            <label className="block text-sm font-medium mb-2">Gender</label>
-                            <Select value={genderFilter} onValueChange={(value) => handleFilterChange('gender', value)}>
+                            <label className="mb-2 block text-sm font-medium">
+                                Gender
+                            </label>
+                            <Select
+                                value={genderFilter}
+                                onValueChange={(value) =>
+                                    handleFilterChange('gender', value)
+                                }
+                            >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Semua Gender" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">Semua Gender</SelectItem>
+                                    <SelectItem value="all">
+                                        Semua Gender
+                                    </SelectItem>
                                     {uniqueGenders.map((gender) => (
                                         <SelectItem key={gender} value={gender}>
                                             {gender}
@@ -155,9 +198,9 @@ export default function History({ imtResult }: HistoryProps) {
                                 </SelectContent>
                             </Select>
                         </div>
-                        
+
                         <div>
-                            <Button 
+                            <Button
                                 onClick={clearFilters}
                                 variant="outline"
                                 className="w-full"
@@ -166,12 +209,16 @@ export default function History({ imtResult }: HistoryProps) {
                             </Button>
                         </div>
                     </div>
-                    
+
                     {/* Results info */}
                     <div className="mt-4 text-sm text-gray-600">
-                        Menampilkan {paginatedData.length} dari {filteredData.length} data
+                        Menampilkan {paginatedData.length} dari{' '}
+                        {filteredData.length} data
                         {filteredData.length !== imtResult.length && (
-                            <span> (difilter dari {imtResult.length} total data)</span>
+                            <span>
+                                {' '}
+                                (difilter dari {imtResult.length} total data)
+                            </span>
                         )}
                     </div>
                 </div>
@@ -224,70 +271,83 @@ export default function History({ imtResult }: HistoryProps) {
                             <TableHead className="border border-gray-300">
                                 Alamat
                             </TableHead>
+                            <TableHead className="border border-gray-300">
+                                Tanggal
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {paginatedData.length === 0 ? (
                             <TableRow>
-                                <TableCell 
-                                    colSpan={13} 
-                                    className="border border-gray-300 text-center py-8 text-gray-500"
+                                <TableCell
+                                    colSpan={13}
+                                    className="border border-gray-300 py-8 text-center text-gray-500"
                                 >
-                                    {filteredData.length === 0 && imtResult.length > 0 
-                                        ? "Tidak ada data yang sesuai dengan filter yang dipilih"
-                                        : "Belum ada data riwayat perhitungan"
-                                    }
+                                    {filteredData.length === 0 &&
+                                    imtResult.length > 0
+                                        ? 'Tidak ada data yang sesuai dengan filter yang dipilih'
+                                        : 'Belum ada data riwayat perhitungan'}
                                 </TableCell>
                             </TableRow>
                         ) : (
                             paginatedData.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell className="border border-gray-300">
-                                        {(currentPage - 1) * itemsPerPage + index + 1}
+                                        {(currentPage - 1) * itemsPerPage +
+                                            index +
+                                            1}
                                     </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.child_name}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.parent_name}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.age}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.gender}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.weight}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.height}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.weight_zscore}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.height_zscore}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.wh_zscore}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.imt_zscore}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.province}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.city}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.district}
-                                </TableCell>
-                                <TableCell className="border border-gray-300">
-                                    {item.address}
-                                </TableCell>
-                            </TableRow>
+                                    <TableCell className="border border-gray-300">
+                                        <Link
+                                            href={`/imt-result/${item.id}`}
+                                            className="cursor-pointer font-medium text-blue-600 hover:text-blue-800 hover:underline"
+                                        >
+                                            {item.child_name}
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.parent_name}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.age}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.gender}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.weight}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.height}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.weight_zscore}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.height_zscore}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.wh_zscore}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.imt_zscore}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.province}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.city}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.district}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.address}
+                                    </TableCell>
+                                    <TableCell className="border border-gray-300">
+                                        {item.created_at}
+                                    </TableCell>
+                                </TableRow>
                             ))
                         )}
                     </TableBody>
@@ -316,35 +376,47 @@ export default function History({ imtResult }: HistoryProps) {
                             >
                                 Sebelumnya
                             </Button>
-                            
+
                             {/* Page numbers */}
                             <div className="flex items-center space-x-1">
-                                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                                    let pageNum;
-                                    if (totalPages <= 5) {
-                                        pageNum = i + 1;
-                                    } else if (currentPage <= 3) {
-                                        pageNum = i + 1;
-                                    } else if (currentPage >= totalPages - 2) {
-                                        pageNum = totalPages - 4 + i;
-                                    } else {
-                                        pageNum = currentPage - 2 + i;
-                                    }
-                                    
-                                    return (
-                                        <Button
-                                            key={pageNum}
-                                            onClick={() => setCurrentPage(pageNum)}
-                                            variant={currentPage === pageNum ? "default" : "outline"}
-                                            size="sm"
-                                            className="w-8 h-8 p-0"
-                                        >
-                                            {pageNum}
-                                        </Button>
-                                    );
-                                })}
+                                {Array.from(
+                                    { length: Math.min(5, totalPages) },
+                                    (_, i) => {
+                                        let pageNum;
+                                        if (totalPages <= 5) {
+                                            pageNum = i + 1;
+                                        } else if (currentPage <= 3) {
+                                            pageNum = i + 1;
+                                        } else if (
+                                            currentPage >=
+                                            totalPages - 2
+                                        ) {
+                                            pageNum = totalPages - 4 + i;
+                                        } else {
+                                            pageNum = currentPage - 2 + i;
+                                        }
+
+                                        return (
+                                            <Button
+                                                key={pageNum}
+                                                onClick={() =>
+                                                    setCurrentPage(pageNum)
+                                                }
+                                                variant={
+                                                    currentPage === pageNum
+                                                        ? 'default'
+                                                        : 'outline'
+                                                }
+                                                size="sm"
+                                                className="h-8 w-8 p-0"
+                                            >
+                                                {pageNum}
+                                            </Button>
+                                        );
+                                    },
+                                )}
                             </div>
-                            
+
                             <Button
                                 onClick={() => setCurrentPage(currentPage + 1)}
                                 disabled={currentPage === totalPages}

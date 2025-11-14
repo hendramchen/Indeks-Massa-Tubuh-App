@@ -15,8 +15,12 @@ Route::get('/', function () {
 
 Route::post('/result', [CalculatorController::class, 'result'])->name('result');
 Route::get('/tabel-zscore', [ZscoreController::class, 'index'])->name('tabel-zscore');
-Route::post('/imt-result', [ImtResultController::class, 'store'])->name('imt-result.store');
-Route::get('/imt-result', [ImtResultController::class, 'index'])->name('imt-result.index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/imt-result', [ImtResultController::class, 'store'])->name('imt-result.store');
+    Route::get('/imt-result', [ImtResultController::class, 'index'])->name('imt-result.index');
+    Route::get('/imt-result/{id}', [ImtResultController::class, 'show'])->name('imt-result.show');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

@@ -14,6 +14,16 @@ class ImtResultController extends Controller
             'imtResult' => $imtResult,
         ]);
     }
+    public function show($id) {
+        $imtResult = ImtResult::where('user_id', auth()->id())
+                            ->where('id', $id)
+                            ->firstOrFail();
+        
+        return Inertia::render('history/show', [
+            'imtResult' => $imtResult,
+        ]);
+    }
+
     public function store(Request $request) {
         $validated = $request->validate([
             'parent_name' => 'required',

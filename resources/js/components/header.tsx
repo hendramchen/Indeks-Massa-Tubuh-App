@@ -98,9 +98,6 @@ export default function Header({
                             <NavigationMenuItem>
                                 <Link href="/imt-result">Tercatat</Link>
                             </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <Link href="/">Tentang</Link>
-                            </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>

@@ -47,4 +47,5 @@ export interface ImtResult {
     imt_zscore: number;
     imt_category: string;
     address: string;
+    created_at: string;
 }
