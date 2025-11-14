@@ -138,6 +138,28 @@ export default function Show({ imtResult }: ShowProps) {
                                         </p>
                                     </div>
                                 </div>
+                                <div className="flex items-center space-x-2">
+                                    <Calendar className="h-4 w-4 text-gray-500" />
+                                    <div>
+                                        <label className="text-sm font-medium text-gray-600">
+                                            Tanggal Pencatatan
+                                        </label>
+                                        <p className="text-lg font-semibold">
+                                            {imtResult.created_at
+                                                ? new Date(
+                                                      imtResult.created_at,
+                                                  ).toLocaleDateString(
+                                                      'id-ID',
+                                                      {
+                                                          day: '2-digit',
+                                                          month: 'short',
+                                                          year: 'numeric',
+                                                      },
+                                                  )
+                                                : ''}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>

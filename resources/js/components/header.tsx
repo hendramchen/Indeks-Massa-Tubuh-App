@@ -4,7 +4,7 @@ import {
     NavigationMenuList,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import { dashboard, login, register, tabelZscore } from '@/routes';
+import { login, logout, register, tabelZscore } from '@/routes';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
@@ -30,10 +30,10 @@ export default function Header({
                     <div className="flex items-center lg:order-2">
                         {auth.user ? (
                             <Link
-                                href={dashboard()}
+                                href={logout()}
                                 className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-white hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                             >
-                                Dashboard
+                                Logout
                             </Link>
                         ) : (
                             <>

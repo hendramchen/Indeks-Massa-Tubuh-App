@@ -9,11 +9,17 @@ use Inertia\Inertia;
 class ImtResultController extends Controller
 {
     public function index() {
-        $imtResult = ImtResult::where('user_id', auth()->id())->get();
+        $user = auth()->user();
+        if ($user->role == 'admin') {
+            $imtResult = ImtResult::all();
+        } else {
+            $imtResult = ImtResult::where('user_id', $user->id)->get();
+        }
         return Inertia::render('history/index', [
             'imtResult' => $imtResult,
         ]);
     }
+
     public function show($id) {
         $imtResult = ImtResult::where('user_id', auth()->id())
                             ->where('id', $id)

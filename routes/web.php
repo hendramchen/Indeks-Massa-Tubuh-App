@@ -23,9 +23,14 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [ImtResultController::class, 'index'])->name('dashboard');
+    // Route::get('dashboard', function () {
+    //     $user = auth()->user();
+    //     if ($user->role == 'admin') {
+    //         return Inertia::render('dashboard');
+    //     }
+    //     return Inertia::render('history');
+    // })->name('dashboard');
 });
 
 require __DIR__.'/settings.php';

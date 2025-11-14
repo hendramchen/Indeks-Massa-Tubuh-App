@@ -8,7 +8,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 
 class CalculatorController extends Controller
-{
+{    
     public function result(Request $request): Response
     {
         $height = $request->input('height');

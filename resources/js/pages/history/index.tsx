@@ -29,6 +29,7 @@ export default function History({ imtResult }: HistoryProps) {
     const [cityFilter, setCityFilter] = useState<string>('all');
     const [ageFilter, setAgeFilter] = useState<string>('all');
     const [genderFilter, setGenderFilter] = useState<string>('all');
+    const [dateFilter, setDateFilter] = useState<string>('all');
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -69,9 +70,14 @@ export default function History({ imtResult }: HistoryProps) {
                 genderFilter === 'all' ||
                 !genderFilter ||
                 item.gender === genderFilter;
-            return matchesCity && matchesAge && matchesGender;
+            const itemDate = item.created_at
+                ? new Date(item.created_at).toISOString().slice(0, 10)
+                : null;
+            const matchesDate =
+                dateFilter === 'all' || !dateFilter || itemDate === dateFilter;
+            return matchesCity && matchesAge && matchesGender && matchesDate;
         });
-    }, [imtResult, cityFilter, ageFilter, genderFilter]);
+    }, [imtResult, cityFilter, ageFilter, genderFilter, dateFilter]);
 
     // Paginate filtered data
     const paginatedData = useMemo(() => {
@@ -96,6 +102,9 @@ export default function History({ imtResult }: HistoryProps) {
             case 'gender':
                 setGenderFilter(value);
                 break;
+            case 'date':
+                setDateFilter(value);
+                break;
         }
     };
 
@@ -104,6 +113,7 @@ export default function History({ imtResult }: HistoryProps) {
         setCityFilter('all');
         setAgeFilter('all');
         setGenderFilter('all');
+        setDateFilter('all');
         setCurrentPage(1);
     };
 
@@ -117,7 +127,7 @@ export default function History({ imtResult }: HistoryProps) {
                 {/* Filter Section */}
                 <div className="mb-6 rounded-lg border bg-gray-50 p-4">
                     <h2 className="mb-4 text-lg font-semibold">Filter Data</h2>
-                    <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-4">
+                    <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-5">
                         <div>
                             <label className="mb-2 block text-sm font-medium">
                                 Kabupaten/Kota
@@ -197,6 +207,23 @@ export default function History({ imtResult }: HistoryProps) {
                                     ))}
                                 </SelectContent>
                             </Select>
+                        </div>
+
+                        <div>
+                            <label className="mb-2 block text-sm font-medium">
+                                Tanggal
+                            </label>
+                            <input
+                                type="date"
+                                className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                                value={dateFilter === 'all' ? '' : dateFilter}
+                                onChange={(e) =>
+                                    handleFilterChange(
+                                        'date',
+                                        e.target.value || 'all',
+                                    )
+                                }
+                            />
                         </div>
 
                         <div>
@@ -345,7 +372,15 @@ export default function History({ imtResult }: HistoryProps) {
                                         {item.address}
                                     </TableCell>
                                     <TableCell className="border border-gray-300">
-                                        {item.created_at}
+                                        {item.created_at
+                                            ? new Date(
+                                                  item.created_at,
+                                              ).toLocaleDateString('id-ID', {
+                                                  day: '2-digit',
+                                                  month: 'short',
+                                                  year: 'numeric',
+                                              })
+                                            : ''}
                                     </TableCell>
                                 </TableRow>
                             ))

@@ -59,27 +59,6 @@ export default function ResultForm({
     const [district, setDistrict] = useState<string>('');
     const [address, setAddress] = useState<string>('');
 
-    console.log({
-        childName,
-        gender,
-        age,
-        year,
-        weight,
-        height,
-        weightNearest,
-        weightZscore,
-        weightCategory,
-        heightNearest,
-        heightZscore,
-        heightCategory,
-        whNearest,
-        whZscore,
-        whCategory,
-        imtNearest,
-        imtZscore,
-        imtCategory,
-    });
-
     return (
         <Form action="/imt-result" method="post">
             <Card>
