@@ -106,7 +106,20 @@ export default function CardResult({
             setImtZscore(getZscoreWithSign(nearest, comparedValue, zScoreData));
             setImtCategory(category);
         }
-    }, []);
+    }, [
+        setWeightNearest,
+        setWeightZscore,
+        setWeightCategory,
+        setHeightNearest,
+        setHeightZscore,
+        setHeightCategory,
+        setWhNearest,
+        setWhZscore,
+        setWhCategory,
+        setImtNearest,
+        setImtZscore,
+        setImtCategory,
+    ]);
     return (
         <Card className="dark:bg-white">
             <CardHeader className="border-b border-gray-400 pb-4">

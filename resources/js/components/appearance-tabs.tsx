@@ -23,7 +23,7 @@ export default function AppearanceToggleTab({
             )}
             {...props}
         >
-            {tabs.map(({ value, icon: Icon, label }) => (
+            {tabs.map(({ value, icon: Icon }) => (
                 <button
                     key={value}
                     onClick={() => updateAppearance(value)}
