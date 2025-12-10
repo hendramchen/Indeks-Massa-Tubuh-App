@@ -25,9 +25,22 @@ export default function Header({
         <header className="border-b border-[#c4c4c4]">
             <nav className="border-gray-200 bg-gradient-to-r from-[#03a79f] to-[#016c82] px-4 py-2.5 lg:px-6 dark:bg-gray-800">
                 <div className="container mx-auto flex flex-wrap items-center justify-between">
-                    <Link href="/" className="text-2xl text-white">
-                        Sigizi
-                    </Link>
+                    <div className="flex items-center gap-2">
+                        <img
+                            src="/heart.svg"
+                            alt="sigizi logo"
+                            width={28}
+                            height={28}
+                            className="h-9 w-9 rounded-full bg-white"
+                        />
+                        <Link
+                            href="/"
+                            className="text-2xl font-semibold text-white"
+                        >
+                            Sigizi
+                        </Link>
+                    </div>
+
                     <div className="flex items-center gap-1 lg:order-2">
                         {auth.user ? (
                             <Link

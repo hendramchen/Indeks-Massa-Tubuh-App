@@ -1,7 +1,5 @@
-import Footer from '@/components/footer';
-import Header from '@/components/header';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import SigiziLayout from '@/layouts/sigizi-layout';
 import { ImtResult } from '@/types/zscore';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Calendar, MapPin, Ruler, Scale, User } from 'lucide-react';
@@ -33,20 +31,16 @@ export default function Show({ imtResult }: ShowProps) {
     // };
 
     return (
-        <div>
+        <SigiziLayout>
             <Head title={`Detail - ${imtResult.child_name}`} />
-            <Header />
             <div className="px-1 py-4">
                 {/* Header with back button */}
-                <div className="my-4 flex flex-col items-center gap-4 md:flex-row">
+                <div className="my-2 flex flex-col items-center gap-4 md:flex-row">
                     <Link href="/imt-result">
-                        <Button variant="outline" size="sm">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Kembali ke Riwayat
-                        </Button>
+                        <ArrowLeft className="text-gray-600" />
                     </Link>
-                    <h1 className="text-2xl font-bold">
-                        Detail Perhitungan IMT
+                    <h1 className="py-4 text-center text-3xl font-semibold text-gray-600 md:py-4 md:text-left md:text-4xl">
+                        {imtResult.child_name}
                     </h1>
                 </div>
 
@@ -384,7 +378,6 @@ export default function Show({ imtResult }: ShowProps) {
                     </CardContent>
                 </Card>
             </div>
-            <Footer />
-        </div>
+        </SigiziLayout>
     );
 }

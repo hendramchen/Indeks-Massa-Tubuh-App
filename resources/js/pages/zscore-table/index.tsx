@@ -1,5 +1,3 @@
-import Footer from '@/components/footer';
-import Header from '@/components/header';
 import {
     Table,
     TableBody,
@@ -8,9 +6,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import SigiziLayout from '@/layouts/sigizi-layout';
 import { tabelZscore } from '@/routes';
 import { ZscoreItem } from '@/types/zscore';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Mars, Venus } from 'lucide-react';
 
 interface TableProps {
@@ -202,8 +201,8 @@ export default function Index({ type, gender, zscores }: TableProps) {
     };
 
     return (
-        <div>
-            <Header />
+        <SigiziLayout>
+            <Head title="Tabel ZScore" />
             <div className="flex items-center gap-2 px-4 pt-4 text-[#00548c]">
                 <Mars />
                 <h2 className="text-lg font-bold">Anak Laki-laki</h2>
@@ -404,7 +403,6 @@ export default function Index({ type, gender, zscores }: TableProps) {
                     </TableBody>
                 </Table>
             </div>
-            <Footer />
-        </div>
+        </SigiziLayout>
     );
 }

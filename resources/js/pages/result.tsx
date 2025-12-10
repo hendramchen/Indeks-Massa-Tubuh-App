@@ -1,7 +1,6 @@
 import CardResult from '@/components/card-result';
-import Footer from '@/components/footer';
-import Header from '@/components/header';
 import { Label } from '@/components/ui/label';
+import SigiziLayout from '@/layouts/sigizi-layout';
 import {
     genderOptions,
     zScoreBBCategory,
@@ -59,23 +58,22 @@ export default function Result({
 
     const { auth } = usePage<SharedData>().props;
     return (
-        <>
+        <SigiziLayout>
             <Head title="Hasil Perhitungan" />
-            <Header />
-            <div className="flex min-h-screen flex-col bg-gradient-to-r from-[#03a79f] to-[#016c82] p-2 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
-                <header className="my-2 flex w-full items-center gap-6 border-b border-[#2be1d8] pb-4">
+            <div>
+                <header className="mb-4 flex w-full items-center justify-center gap-6 border-b border-gray-200">
                     <Link href="/">
-                        <ArrowLeft className="text-white" />
+                        <ArrowLeft className="text-gray-600" />
                     </Link>
-                    <h1 className="text-center text-3xl font-bold text-white">
+                    <h1 className="py-4 text-center text-3xl font-semibold text-gray-600 md:py-4 md:text-left md:text-4xl">
                         Hasil Perhitungan
                     </h1>
                 </header>
-                <div className="my-4 flex flex-col text-white">
+                <div className="my-4 flex flex-col">
                     <Label className="font-bold">Nama Anak</Label>
                     <p className="text-2xl">{name}</p>
                 </div>
-                <div className="mb-6 flex w-full gap-4 text-white">
+                <div className="mb-6 flex w-full gap-4">
                     <div className="my-4 flex w-1/2 flex-col gap-1">
                         <Label className="font-bold">Tinggi Badan</Label>
                         <p className="text-2xl">{height} cm</p>
@@ -85,7 +83,7 @@ export default function Result({
                         <p className="text-2xl">{weight} kg</p>
                     </div>
                 </div>
-                <div className="mb-6 flex w-full gap-4 text-white">
+                <div className="mb-6 flex w-full gap-4">
                     <div className="my-4 flex w-1/2 flex-col gap-1">
                         <Label className="font-bold">Umur</Label>
                         <p className="text-2xl">
@@ -210,39 +208,38 @@ export default function Result({
                             />
                         </>
                     )}
-                    {auth.user && (
-                        <ResultForm
-                            childName={name}
-                            gender={gender}
-                            age={age}
-                            year={year}
-                            weight={weight}
-                            height={height}
-                            weightNearest={weightNearest}
-                            weightZscore={weightZscore}
-                            weightCategory={weightCategory}
-                            heightNearest={heightNearest}
-                            heightZscore={heightZscore}
-                            heightCategory={heightCategory}
-                            whNearest={whNearest}
-                            whZscore={whZscore}
-                            whCategory={whCategory}
-                            imtNearest={imtNearest}
-                            imtZscore={imtZscore}
-                            imtCategory={imtCategory}
-                        />
-                    )}
                 </div>
+                {auth.user && (
+                    <ResultForm
+                        childName={name}
+                        gender={gender}
+                        age={age}
+                        year={year}
+                        weight={weight}
+                        height={height}
+                        weightNearest={weightNearest}
+                        weightZscore={weightZscore}
+                        weightCategory={weightCategory}
+                        heightNearest={heightNearest}
+                        heightZscore={heightZscore}
+                        heightCategory={heightCategory}
+                        whNearest={whNearest}
+                        whZscore={whZscore}
+                        whCategory={whCategory}
+                        imtNearest={imtNearest}
+                        imtZscore={imtZscore}
+                        imtCategory={imtCategory}
+                    />
+                )}
                 <div className="my-4">
                     <Link
                         href="/"
-                        className="flex items-center gap-2 rounded-lg bg-white px-6 py-2 font-semibold"
+                        className="flex items-center gap-2 rounded-lg bg-gray-200 px-6 py-2 font-semibold"
                     >
                         <ArrowLeft className="text-gray-500" /> Kembali
                     </Link>
                 </div>
-                <Footer />
             </div>
-        </>
+        </SigiziLayout>
     );
 }

@@ -1,5 +1,3 @@
-import Footer from '@/components/footer';
-import Header from '@/components/header';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -22,6 +20,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import SigiziLayout from '@/layouts/sigizi-layout';
 import { ImtResult } from '@/types/zscore';
 import { Head, Link } from '@inertiajs/react';
 import {
@@ -45,7 +44,7 @@ export default function History({ imtResult }: HistoryProps) {
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 5;
 
     // Get unique values for filter options
     const uniqueCities = useMemo(() => {
@@ -130,366 +129,355 @@ export default function History({ imtResult }: HistoryProps) {
     };
 
     return (
-        <div>
+        <SigiziLayout>
             <Head title="Riwayat Perhitungan" />
-            <Header />
-            <div className="px-1 py-4 md:px-4">
-                <h1 className="mb-6 text-2xl font-bold">Riwayat Perhitungan</h1>
 
-                {/* Filter Section */}
-                <Card className="mb-6 rounded-lg border p-4">
-                    <CardHeader>
-                        <h2 className="mb-4 text-lg font-semibold">
-                            Filter Data
-                        </h2>
-                    </CardHeader>
+            <h1 className="py-4 text-center text-3xl font-semibold text-gray-600 md:py-4 md:text-left md:text-4xl">
+                Riwayat Perhitungan
+            </h1>
+            {/* Filter Section */}
+            <Card className="mb-6 rounded-lg border text-gray-600">
+                <CardHeader className="border-b border-gray-200">
+                    <h2 className="mb-4 text-lg font-semibold">Filter Data</h2>
+                </CardHeader>
 
-                    <CardContent className="grid grid-cols-1 items-end gap-4 md:grid-cols-5">
-                        <div>
-                            <label className="mb-2 block text-sm font-medium">
-                                Kabupaten/Kota
-                            </label>
-                            <Select
-                                value={cityFilter}
-                                onValueChange={(value) =>
-                                    handleFilterChange('city', value)
-                                }
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Semua Kota" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">
-                                        Semua Kota
+                <CardContent className="grid grid-cols-1 items-end gap-4 md:grid-cols-5">
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">
+                            Kabupaten/Kota
+                        </label>
+                        <Select
+                            value={cityFilter}
+                            onValueChange={(value) =>
+                                handleFilterChange('city', value)
+                            }
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Semua Kota" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Semua Kota</SelectItem>
+                                {uniqueCities.map((city) => (
+                                    <SelectItem key={city} value={city}>
+                                        {city}
                                     </SelectItem>
-                                    {uniqueCities.map((city) => (
-                                        <SelectItem key={city} value={city}>
-                                            {city}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
 
-                        <div>
-                            <label className="mb-2 block text-sm font-medium">
-                                Umur
-                            </label>
-                            <Select
-                                value={ageFilter}
-                                onValueChange={(value) =>
-                                    handleFilterChange('age', value)
-                                }
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Semua Umur" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">
-                                        Semua Umur
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">
+                            Umur
+                        </label>
+                        <Select
+                            value={ageFilter}
+                            onValueChange={(value) =>
+                                handleFilterChange('age', value)
+                            }
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Semua Umur" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Semua Umur</SelectItem>
+                                {uniqueAges.map((age) => (
+                                    <SelectItem
+                                        key={age}
+                                        value={age.toString()}
+                                    >
+                                        {age} bulan
                                     </SelectItem>
-                                    {uniqueAges.map((age) => (
-                                        <SelectItem
-                                            key={age}
-                                            value={age.toString()}
-                                        >
-                                            {age} bulan
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
 
-                        <div>
-                            <label className="mb-2 block text-sm font-medium">
-                                Gender
-                            </label>
-                            <Select
-                                value={genderFilter}
-                                onValueChange={(value) =>
-                                    handleFilterChange('gender', value)
-                                }
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Semua Gender" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">
-                                        Semua Gender
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">
+                            Gender
+                        </label>
+                        <Select
+                            value={genderFilter}
+                            onValueChange={(value) =>
+                                handleFilterChange('gender', value)
+                            }
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Semua Gender" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">
+                                    Semua Gender
+                                </SelectItem>
+                                {uniqueGenders.map((gender) => (
+                                    <SelectItem key={gender} value={gender}>
+                                        {gender}
                                     </SelectItem>
-                                    {uniqueGenders.map((gender) => (
-                                        <SelectItem key={gender} value={gender}>
-                                            {gender}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
 
-                        <div>
-                            <label className="mb-2 block text-sm font-medium">
-                                Tanggal
-                            </label>
-                            <input
-                                type="date"
-                                className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                                value={dateFilter === 'all' ? '' : dateFilter}
-                                onChange={(e) =>
-                                    handleFilterChange(
-                                        'date',
-                                        e.target.value || 'all',
-                                    )
-                                }
-                            />
-                        </div>
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">
+                            Tanggal
+                        </label>
+                        <input
+                            type="date"
+                            className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                            value={dateFilter === 'all' ? '' : dateFilter}
+                            onChange={(e) =>
+                                handleFilterChange(
+                                    'date',
+                                    e.target.value || 'all',
+                                )
+                            }
+                        />
+                    </div>
 
-                        <div>
-                            <Button
-                                onClick={clearFilters}
-                                variant="outline"
-                                className="w-full"
+                    <div>
+                        <Button
+                            onClick={clearFilters}
+                            variant="outline"
+                            className="w-full"
+                        >
+                            Reset Filter
+                        </Button>
+                    </div>
+                </CardContent>
+
+                {/* Results info */}
+                <CardFooter className="mt-4 text-sm text-gray-600">
+                    Menampilkan {paginatedData.length} dari{' '}
+                    {filteredData.length} data
+                    {filteredData.length !== imtResult.length && (
+                        <span>
+                            {' '}
+                            (difilter dari {imtResult.length} total data)
+                        </span>
+                    )}
+                </CardFooter>
+            </Card>
+
+            <Table className="w-full text-gray-800">
+                <TableHeader>
+                    <TableRow className="bg-gray-200">
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            No
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Nama Anak
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Nama Orang Tua
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Umur
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Gender
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Berat Badan
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Tinggi Badan
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            BB / U
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            PB / U
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            BB / PB
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            IMT
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Provinsi
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Kabupaten / Kota
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Kecamatan / Desa
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Alamat
+                        </TableHead>
+                        <TableHead className="border border-gray-300 text-gray-700">
+                            Tanggal
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {paginatedData.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={13}
+                                className="border border-gray-300 py-8 text-center text-gray-500"
                             >
-                                Reset Filter
-                            </Button>
-                        </div>
-                    </CardContent>
-
-                    {/* Results info */}
-                    <CardFooter className="mt-4 text-sm text-gray-600">
-                        Menampilkan {paginatedData.length} dari{' '}
-                        {filteredData.length} data
-                        {filteredData.length !== imtResult.length && (
-                            <span>
-                                {' '}
-                                (difilter dari {imtResult.length} total data)
-                            </span>
-                        )}
-                    </CardFooter>
-                </Card>
-
-                <Table className="w-full">
-                    <TableHeader>
-                        <TableRow className="bg-gray-200">
-                            <TableHead className="border border-gray-300">
-                                No
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Nama Anak
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Nama Orang Tua
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Umur
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Gender
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Berat Badan
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Tinggi Badan
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                BB / U
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                PB / U
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                BB / PB
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                IMT
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Provinsi
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Kabupaten / Kota
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Kecamatan / Desa
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Alamat
-                            </TableHead>
-                            <TableHead className="border border-gray-300">
-                                Tanggal
-                            </TableHead>
+                                {filteredData.length === 0 &&
+                                imtResult.length > 0
+                                    ? 'Tidak ada data yang sesuai dengan filter yang dipilih'
+                                    : 'Belum ada data riwayat perhitungan'}
+                            </TableCell>
                         </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {paginatedData.length === 0 ? (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={13}
-                                    className="border border-gray-300 py-8 text-center text-gray-500"
-                                >
-                                    {filteredData.length === 0 &&
-                                    imtResult.length > 0
-                                        ? 'Tidak ada data yang sesuai dengan filter yang dipilih'
-                                        : 'Belum ada data riwayat perhitungan'}
+                    ) : (
+                        paginatedData.map((item, index) => (
+                            <TableRow key={index}>
+                                <TableCell className="border border-gray-300">
+                                    {(currentPage - 1) * itemsPerPage +
+                                        index +
+                                        1}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    <Link
+                                        href={`/imt-result/${item.id}`}
+                                        className="cursor-pointer font-medium text-[#035f65] hover:text-[#024246] hover:underline"
+                                    >
+                                        {item.child_name}
+                                    </Link>
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.parent_name}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.age}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.gender}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.weight}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.height}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.weight_zscore}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.height_zscore}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.wh_zscore}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.imt_zscore}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.province}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.city}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.district}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.address}
+                                </TableCell>
+                                <TableCell className="border border-gray-300">
+                                    {item.created_at
+                                        ? new Date(
+                                              item.created_at,
+                                          ).toLocaleDateString('id-ID', {
+                                              day: '2-digit',
+                                              month: 'short',
+                                              year: 'numeric',
+                                          })
+                                        : ''}
                                 </TableCell>
                             </TableRow>
-                        ) : (
-                            paginatedData.map((item, index) => (
-                                <TableRow key={index}>
-                                    <TableCell className="border border-gray-300">
-                                        {(currentPage - 1) * itemsPerPage +
-                                            index +
-                                            1}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        <Link
-                                            href={`/imt-result/${item.id}`}
-                                            className="cursor-pointer font-medium text-[#035f65] hover:text-[#024246] hover:underline"
-                                        >
-                                            {item.child_name}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.parent_name}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.age}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.gender}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.weight}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.height}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.weight_zscore}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.height_zscore}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.wh_zscore}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.imt_zscore}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.province}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.city}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.district}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.address}
-                                    </TableCell>
-                                    <TableCell className="border border-gray-300">
-                                        {item.created_at
-                                            ? new Date(
-                                                  item.created_at,
-                                              ).toLocaleDateString('id-ID', {
-                                                  day: '2-digit',
-                                                  month: 'short',
-                                                  year: 'numeric',
-                                              })
-                                            : ''}
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
+                        ))
+                    )}
+                </TableBody>
+            </Table>
 
-                {/* Pagination Controls */}
-                {totalPages > 1 && (
-                    <div className="mt-6 flex flex-col items-center justify-between gap-4 overflow-x-auto">
-                        <div className="text-sm text-gray-600">
-                            Halaman {currentPage} dari {totalPages}
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Button
-                                onClick={() => setCurrentPage(1)}
-                                disabled={currentPage === 1}
-                                variant="outline"
-                                size="sm"
-                            >
-                                <ChevronFirstIcon />
-                            </Button>
-                            <Button
-                                onClick={() => setCurrentPage(currentPage - 1)}
-                                disabled={currentPage === 1}
-                                variant="outline"
-                                size="sm"
-                            >
-                                <ChevronLeftIcon />
-                            </Button>
-
-                            {/* Page numbers */}
-                            <div className="flex items-center space-x-1">
-                                {Array.from(
-                                    { length: Math.min(5, totalPages) },
-                                    (_, i) => {
-                                        let pageNum;
-                                        if (totalPages <= 5) {
-                                            pageNum = i + 1;
-                                        } else if (currentPage <= 3) {
-                                            pageNum = i + 1;
-                                        } else if (
-                                            currentPage >=
-                                            totalPages - 2
-                                        ) {
-                                            pageNum = totalPages - 4 + i;
-                                        } else {
-                                            pageNum = currentPage - 2 + i;
-                                        }
-
-                                        return (
-                                            <Button
-                                                key={pageNum}
-                                                onClick={() =>
-                                                    setCurrentPage(pageNum)
-                                                }
-                                                variant={
-                                                    currentPage === pageNum
-                                                        ? 'default'
-                                                        : 'outline'
-                                                }
-                                                size="sm"
-                                                className="h-8 w-8 p-0"
-                                            >
-                                                {pageNum}
-                                            </Button>
-                                        );
-                                    },
-                                )}
-                            </div>
-
-                            <Button
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                                variant="outline"
-                                size="sm"
-                            >
-                                <ChevronRightIcon />
-                            </Button>
-                            <Button
-                                onClick={() => setCurrentPage(totalPages)}
-                                disabled={currentPage === totalPages}
-                                variant="outline"
-                                size="sm"
-                            >
-                                <ChevronLastIcon />
-                            </Button>
-                        </div>
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+                <div className="mt-6 flex flex-col items-center justify-between gap-4 overflow-x-auto py-4">
+                    <div className="text-sm text-gray-600">
+                        Halaman {currentPage} dari {totalPages}
                     </div>
-                )}
-            </div>
-            <Footer />
-        </div>
+                    <div className="flex items-center space-x-2">
+                        <Button
+                            onClick={() => setCurrentPage(1)}
+                            disabled={currentPage === 1}
+                            variant="outline"
+                            size="sm"
+                        >
+                            <ChevronFirstIcon />
+                        </Button>
+                        <Button
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            variant="outline"
+                            size="sm"
+                        >
+                            <ChevronLeftIcon />
+                        </Button>
+
+                        {/* Page numbers */}
+                        <div className="flex items-center space-x-1">
+                            {Array.from(
+                                { length: Math.min(5, totalPages) },
+                                (_, i) => {
+                                    let pageNum;
+                                    if (totalPages <= 5) {
+                                        pageNum = i + 1;
+                                    } else if (currentPage <= 3) {
+                                        pageNum = i + 1;
+                                    } else if (currentPage >= totalPages - 2) {
+                                        pageNum = totalPages - 4 + i;
+                                    } else {
+                                        pageNum = currentPage - 2 + i;
+                                    }
+
+                                    return (
+                                        <Button
+                                            key={pageNum}
+                                            onClick={() =>
+                                                setCurrentPage(pageNum)
+                                            }
+                                            variant={
+                                                currentPage === pageNum
+                                                    ? 'default'
+                                                    : 'outline'
+                                            }
+                                            size="sm"
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            {pageNum}
+                                        </Button>
+                                    );
+                                },
+                            )}
+                        </div>
+
+                        <Button
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            variant="outline"
+                            size="sm"
+                        >
+                            <ChevronRightIcon />
+                        </Button>
+                        <Button
+                            onClick={() => setCurrentPage(totalPages)}
+                            disabled={currentPage === totalPages}
+                            variant="outline"
+                            size="sm"
+                        >
+                            <ChevronLastIcon />
+                        </Button>
+                    </div>
+                </div>
+            )}
+        </SigiziLayout>
     );
 }
