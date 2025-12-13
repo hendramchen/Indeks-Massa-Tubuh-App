@@ -12,7 +12,7 @@ class ParentInfoController extends Controller
      */
     public function index()
     {
-        return Inertia::render('parents/parent-info');
+        return Inertia::render('parents/parent-list');
     }
 
     /**

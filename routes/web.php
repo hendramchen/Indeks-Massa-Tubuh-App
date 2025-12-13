@@ -22,8 +22,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/imt-result', [ImtResultController::class, 'store'])->name('imt-result.store');
     Route::get('/imt-result', [ImtResultController::class, 'index'])->name('imt-result.index');
     Route::get('/imt-result/{id}', [ImtResultController::class, 'show'])->name('imt-result.show');
-    Route::resource('child-info', ChildInfoController::class);
-    Route::resource('parent-info', ParentInfoController::class);
+    Route::resource('children', ChildInfoController::class);
+    Route::resource('parents', ParentInfoController::class);
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

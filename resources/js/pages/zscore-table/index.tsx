@@ -203,6 +203,9 @@ export default function Index({ type, gender, zscores }: TableProps) {
     return (
         <SigiziLayout>
             <Head title="Tabel ZScore" />
+            <h1 className="pt-6 pb-4 text-center text-3xl font-semibold md:pt-8 md:pb-4 md:text-left md:text-4xl">
+                Tabel Z-Score
+            </h1>
             <div className="flex items-center gap-2 px-4 pt-4 text-[#00548c]">
                 <Mars />
                 <h2 className="text-lg font-bold">Anak Laki-laki</h2>

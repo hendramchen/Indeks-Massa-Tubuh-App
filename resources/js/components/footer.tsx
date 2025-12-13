@@ -1,15 +1,9 @@
 import { Link } from '@inertiajs/react';
 export default function Footer() {
     return (
-        <footer className="flex w-full flex-col items-center gap-4 bg-gradient-to-r from-[#03a79f] to-[#016c82] py-6 text-white">
+        <footer className="flex w-full flex-col items-center gap-4 bg-[#a61e4d] py-6 text-white">
             <div className="flex items-center gap-2">
-                <img
-                    src="/heart.svg"
-                    alt="sigizi logo"
-                    width={28}
-                    height={28}
-                    className="h-9 w-9 rounded-full bg-white"
-                />
+                <img src="/heart3.svg" alt="sigizi logo" />
                 <Link href="/" className="text-2xl font-semibold text-white">
                     Sigizi
                 </Link>
