@@ -7,7 +7,7 @@ import AntropometriTable from './antropometri-table';
 export default function Welcome() {
     return (
         <SigiziLayout>
-            <Head title="Sigizi App" />
+            <Head title="Selamat Datang di Sigizi App" />
             <div className="flex flex-col items-center p-2 text-gray-600 lg:justify-center lg:p-8">
                 <div className="container flex flex-col justify-between gap-4 opacity-100 transition-opacity duration-750 md:flex-row lg:grow starting:opacity-0">
                     <BMICalculator />
