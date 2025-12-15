@@ -335,7 +335,7 @@ export default function Index({ type, gender, zscores }: TableProps) {
                 <Table className="mt-6 w-full">
                     <TableHeader>
                         <TableRow className="bg-gray-200">
-                            <TableHead className="border-t border-gray-300">
+                            <TableHead className="border-t border-l border-gray-300">
                                 {type === 'BBPB' || type === 'BBTB'
                                     ? 'Panjang'
                                     : 'Umur'}
@@ -348,7 +348,7 @@ export default function Index({ type, gender, zscores }: TableProps) {
                             </TableHead>
                         </TableRow>
                         <TableRow className="bg-gray-200">
-                            <TableHead className="border-b border-gray-300">
+                            <TableHead className="border-b border-l border-gray-300">
                                 {type === 'BBPB' || type === 'BBTB'
                                     ? 'Badan'
                                     : '(bulan)'}

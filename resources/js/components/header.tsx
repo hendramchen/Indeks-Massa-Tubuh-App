@@ -1,15 +1,18 @@
-import { cn } from '@/lib/utils';
+import { cn, isSameUrl } from '@/lib/utils';
+import { login, logout, register } from '@/routes';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function Header({
-    canRegister = true,
-}: {
-    canRegister?: boolean;
-}) {
+export default function Header() {
     const { auth } = usePage<SharedData>().props;
     const [open, setOpen] = useState(false);
+
+    if (typeof window === 'undefined') {
+        return null;
+    }
+
+    const currentPath = window.location.pathname;
 
     const toggleOpen = () => {
         setOpen(!open);
@@ -25,18 +28,30 @@ export default function Header({
                         </h1>
                     </Link>
                     <div className="flex items-center lg:order-2">
-                        <Link
-                            href="#"
-                            className="mr-2 rounded-lg px-4 py-2 text-sm font-medium text-white hover:bg-gray-50 hover:text-[#d6336c] focus:ring-4 focus:ring-gray-300 focus:outline-none lg:px-5 lg:py-2.5"
-                        >
-                            Log in
-                        </Link>
-                        <Link
-                            href="#"
-                            className="bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mr-2 rounded-lg px-4 py-2 text-sm font-medium text-white focus:ring-4 focus:outline-none lg:px-5 lg:py-2.5"
-                        >
-                            Register
-                        </Link>
+                        {auth.user ? (
+                            <Link
+                                href={logout()}
+                                className="mr-2 rounded-lg px-4 py-2 text-sm font-bold text-white hover:bg-gray-50 hover:text-[#d6336c] focus:ring-4 focus:ring-gray-300 focus:outline-none lg:px-5 lg:py-2.5"
+                            >
+                                Logout
+                            </Link>
+                        ) : (
+                            <>
+                                <Link
+                                    href={login()}
+                                    className="mr-2 rounded-lg px-4 py-2 text-sm font-bold text-white hover:bg-gray-50 hover:text-[#d6336c] focus:ring-4 focus:ring-gray-300 focus:outline-none lg:px-5 lg:py-2.5"
+                                >
+                                    Log in
+                                </Link>
+                                <Link
+                                    href={register()}
+                                    className="mr-2 rounded-lg px-4 py-2 text-sm font-bold text-white hover:bg-gray-50 hover:text-[#d6336c] focus:ring-4 focus:ring-gray-300 focus:outline-none lg:px-5 lg:py-2.5"
+                                >
+                                    Register
+                                </Link>
+                            </>
+                        )}
+
                         <button
                             data-collapse-toggle="mobile-menu-2"
                             type="button"
@@ -80,27 +95,50 @@ export default function Header({
                         id="mobile-menu-2"
                     >
                         <ul className="mt-4 flex flex-col font-medium lg:mt-0 lg:flex-row lg:space-x-8">
-                            <li>
+                            <li className="border-b border-[#f06595] py-2 md:border-none md:py-0">
                                 <Link
                                     href="/tabel-zscore"
-                                    className="bg-primary-700 lg:text-primary-700 block rounded py-2 pr-4 pl-3 font-semibold text-white lg:bg-transparent lg:p-0"
-                                    aria-current="page"
+                                    className={cn(
+                                        'py-2 pr-4 pl-3 text-[#ffdeeb]',
+                                        {
+                                            'font-bold text-white': isSameUrl(
+                                                currentPath,
+                                                '/tabel-zscore',
+                                            ),
+                                        },
+                                    )}
                                 >
                                     Zscores
                                 </Link>
                             </li>
-                            <li>
+                            <li className="border-b border-[#f06595] py-2 md:border-none md:py-0">
                                 <Link
                                     href="/parents"
-                                    className="lg:hover:text-primary-700 py-2 pr-4 pl-3 text-[#ffdeeb] lg:border-0 lg:p-0 lg:hover:bg-transparent"
+                                    className={cn(
+                                        'py-2 pr-4 pl-3 text-[#ffdeeb]',
+                                        {
+                                            'font-bold text-white': isSameUrl(
+                                                currentPath,
+                                                '/parents',
+                                            ),
+                                        },
+                                    )}
                                 >
                                     Parents
                                 </Link>
                             </li>
-                            <li>
+                            <li className="py-2 md:py-0">
                                 <Link
                                     href="/children"
-                                    className="lg:hover:text-primary-700 py-2 pr-4 pl-3 text-[#ffdeeb] lg:border-0 lg:p-0 lg:hover:bg-transparent"
+                                    className={cn(
+                                        'py-2 pr-4 pl-3 text-[#ffdeeb]',
+                                        {
+                                            'font-bold text-white': isSameUrl(
+                                                currentPath,
+                                                '/children',
+                                            ),
+                                        },
+                                    )}
                                 >
                                     Children
                                 </Link>

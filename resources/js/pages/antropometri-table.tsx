@@ -118,8 +118,8 @@ const tableIMT5PlusData = [
 
 export default function AntropometriTable() {
     return (
-        <div>
-            <h1 className="mb-4 border-b border-gray-300 pb-4 text-center text-2xl font-bold text-[#0b7285]">
+        <div className="my-6">
+            <h1 className="mb-4 border-b border-gray-200 pb-4 text-center text-2xl font-bold text-[#d6336c] md:text-4xl">
                 Kategori dan Ambang Batas
                 <br />
                 Status Gizi Anak

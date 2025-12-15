@@ -16,7 +16,7 @@ import type {
     ZscoreCategory as ZscoreCategoryType,
     ZscoreData,
 } from '@/types/zscore';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 interface CardResultProps {
     title: string;
@@ -61,52 +61,72 @@ export default function CardResult({
     setImtZscore,
     setImtCategory,
 }: CardResultProps) {
-    if (!zScoreData) return null;
-    const comparedValue = getComparedValue(zScoreType, weight, height);
-    const satuan = zScoreType === 'BB' ? 'kg' : 'cm';
-    const nearest = findNearest(zScoreData, comparedValue);
-    const category = getZScoreCategory(
-        getZscoreWithSign(nearest, comparedValue, zScoreData),
-        zScoreCategory,
+    const comparedValue = useMemo(
+        () => getComparedValue(zScoreType, weight, height),
+        [zScoreType, weight, height],
     );
-    const data = [
-        {
-            label: 'Nilai Terdekat',
-            value: `${nearest} ${satuan}`,
-        },
-        {
-            label: 'Z-Score',
-            value: `${getZscoreWithSign(nearest, comparedValue, zScoreData)}`,
-        },
-        {
-            label: 'Kategori',
-            value: `${category}`,
-        },
-    ];
+    const satuan = useMemo(
+        () => (zScoreType === 'BB' ? 'kg' : 'cm'),
+        [zScoreType],
+    );
+    const nearest = useMemo(
+        () => (zScoreData ? findNearest(zScoreData, comparedValue) : null),
+        [zScoreData, comparedValue],
+    );
+    const zScoreValue = useMemo(
+        () =>
+            nearest !== null && zScoreData
+                ? getZscoreWithSign(nearest, comparedValue, zScoreData)
+                : '',
+        [nearest, comparedValue, zScoreData],
+    );
+    const category = useMemo(
+        () =>
+            zScoreValue ? getZScoreCategory(zScoreValue, zScoreCategory) : '',
+        [zScoreValue, zScoreCategory],
+    );
+    const data = useMemo(
+        () => [
+            {
+                label: 'Nilai Terdekat',
+                value: nearest !== null ? `${nearest} ${satuan}` : '-',
+            },
+            {
+                label: 'Z-Score',
+                value: zScoreValue ? `${zScoreValue}` : '-',
+            },
+            {
+                label: 'Kategori',
+                value: category ? `${category}` : '-',
+            },
+        ],
+        [nearest, satuan, zScoreValue, category],
+    );
 
     useEffect(() => {
+        if (!zScoreData || nearest === null || !zScoreValue || !category)
+            return;
         if (zScoreType === 'BB') {
             setWeightNearest(nearest.toString() + 'kg');
-            setWeightZscore(
-                getZscoreWithSign(nearest, comparedValue, zScoreData),
-            );
+            setWeightZscore(zScoreValue);
             setWeightCategory(category);
         } else if (zScoreType === 'PB' || zScoreType === 'TB') {
             setHeightNearest(nearest.toString() + 'cm');
-            setHeightZscore(
-                getZscoreWithSign(nearest, comparedValue, zScoreData),
-            );
+            setHeightZscore(zScoreValue);
             setHeightCategory(category);
         } else if (zScoreType === 'BBPB' || zScoreType === 'BBTB') {
             setWhNearest(nearest.toString() + 'kg');
-            setWhZscore(getZscoreWithSign(nearest, comparedValue, zScoreData));
+            setWhZscore(zScoreValue);
             setWhCategory(category);
         } else if (zScoreType === 'IMT' || zScoreType === 'IMT5Plus') {
             setImtNearest(nearest.toString() + ' IMT');
-            setImtZscore(getZscoreWithSign(nearest, comparedValue, zScoreData));
+            setImtZscore(zScoreValue);
             setImtCategory(category);
         }
     }, [
+        category,
+        comparedValue,
+        nearest,
         setWeightNearest,
         setWeightZscore,
         setWeightCategory,
@@ -119,7 +139,11 @@ export default function CardResult({
         setImtNearest,
         setImtZscore,
         setImtCategory,
+        zScoreData,
+        zScoreType,
+        zScoreValue,
     ]);
+    if (!zScoreData) return null;
     return (
         <Card className="dark:bg-white">
             <CardHeader className="border-b border-gray-400 pb-4">
