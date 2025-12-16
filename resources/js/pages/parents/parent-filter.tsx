@@ -29,7 +29,7 @@ export default function ParentFilter({ setFilters }: Props) {
         fetch('/city')
             .then((response) => response.json())
             .then((data) => {
-                const cityData = data.map((city: any) => {
+                const cityData = data.map((city: { name: string }) => {
                     return {
                         label: city.name,
                         value: city.name,
@@ -43,7 +43,7 @@ export default function ParentFilter({ setFilters }: Props) {
         fetch('/district')
             .then((response) => response.json())
             .then((data) => {
-                const districtData = data.map((district: any) => {
+                const districtData = data.map((district: { name: string }) => {
                     return {
                         label: district.name,
                         value: district.name,
