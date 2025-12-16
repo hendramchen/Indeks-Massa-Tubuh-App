@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('imt_nearest')->nullable();
             $table->string('imt_zscore')->nullable();
             $table->string('imt_category')->nullable();
+            $table->date('note_date')->nullable();
             // $table->string('province')->nullable();
             // $table->string('city')->nullable();
             // $table->string('district')->nullable();

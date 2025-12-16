@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('child_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('child_name');
+            $table->string('name');
             $table->enum('gender', ['male', 'female']);
             $table->date('birth_date');
             $table->foreignId('parent_info_id')->constrained()->cascadeOnDelete();
