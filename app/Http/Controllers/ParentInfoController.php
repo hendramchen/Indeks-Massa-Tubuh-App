@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\ParentInfo;
 
 class ParentInfoController extends Controller
 {
@@ -13,6 +14,28 @@ class ParentInfoController extends Controller
     public function index()
     {
         return Inertia::render('parents/parent-list');
+    }
+
+    public function getParents(Request $request)
+    {
+        $query = ParentInfo::orderByDesc('created_at');
+        
+        // Apply filters if present
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+        if ($request->filled('phone')) {
+            $query->where('phone', 'like', '%' . $request->phone . '%');
+        }
+        if ($request->filled('city')) {
+            $query->where('city', $request->city);
+        }
+        if ($request->filled('district')) {
+            $query->where('district', $request->district);
+        }
+        
+        $parents = $query->paginate(10);
+        return response()->json($parents);
     }
 
     /**
@@ -36,7 +59,14 @@ class ParentInfoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $parent = ParentInfo::find($id);
+        if (!$parent) {
+            abort(404);
+        }
+        return Inertia::render('parents/parent-info', [
+            'parentId' => $id,
+            'parent' => $parent,
+        ]);
     }
 
     /**
