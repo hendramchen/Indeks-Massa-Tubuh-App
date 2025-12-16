@@ -1,5 +1,7 @@
 import SigiziLayout from '@/layouts/sigizi-layout';
 import { Head } from '@inertiajs/react';
+import ChildFilter from './child-filter';
+import ChildTable from './child-table';
 
 export default function ChildList() {
     return (
@@ -8,10 +10,8 @@ export default function ChildList() {
             <h1 className="pt-6 pb-4 text-center text-3xl font-semibold md:pt-8 md:pb-4 md:text-left md:text-4xl">
                 Daftar Anak
             </h1>
-            <div className="flex flex-col items-start gap-4 py-4 md:flex-row">
-                <div>Left</div>
-                <div>Right</div>
-            </div>
+            <ChildFilter />
+            <ChildTable />
         </SigiziLayout>
     );
 }

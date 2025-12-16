@@ -15,17 +15,25 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import SigiziLayout from '@/layouts/sigizi-layout';
-import { Head } from '@inertiajs/react';
+import { ParentType } from '@/types/parent-info';
+import { Head, Link } from '@inertiajs/react';
+import { ArrowLeft } from 'lucide-react';
 
-export default function ParentInfo() {
+export default function ParentInfo({ parent }: { parent: ParentType }) {
     return (
         <SigiziLayout>
-            <Head title={`Parent Info`} />
-            <h1 className="pt-6 pb-4 text-center text-3xl font-semibold md:pt-8 md:pb-4 md:text-left md:text-4xl">
-                Informasi Orang Tua
-            </h1>
+            <Head title={`Detail Info Orang Tua`} />
+            <div className="flex items-center justify-center gap-4 pt-6 pb-4 md:justify-start md:pt-8 md:pb-4">
+                <Link href="/parents">
+                    <ArrowLeft className="h-8 w-8" />
+                </Link>
+                <h1 className="text-3xl font-semibold md:text-4xl">
+                    Informasi Orang Tua
+                </h1>
+            </div>
+
             <div className="flex flex-col items-start gap-4 py-4 md:flex-row">
-                <Card className="w-full flex-1">
+                <Card className="w-full flex-1 rounded-none md:rounded-lg">
                     <CardHeader>
                         <CardTitle className="text-2xl">
                             Data Orang Tua
@@ -34,28 +42,30 @@ export default function ParentInfo() {
                     <CardContent>
                         <div className="my-4 flex flex-col justify-between md:flex-row">
                             <h1 className="font-bold">Provinsi</h1>
-                            <p>Bali</p>
+                            <p>{parent.province}</p>
                         </div>
                         <div className="my-4 flex flex-col justify-between md:flex-row">
                             <p className="font-bold">Kabupaten</p>
-                            <p>Buleleng</p>
+                            <p>{parent.city}</p>
                         </div>
                         <div className="my-4 flex flex-col justify-between md:flex-row">
                             <p className="font-bold">Kecamatan</p>
-                            <p className="">Baktiseraga</p>
+                            <p>{parent.district}</p>
                         </div>
                         <div className="my-4 flex flex-col justify-between md:flex-row">
                             <p className="font-bold">Alamat</p>
-                            <p className="">
-                                Jalan Laksamana Jalan Laksamana No.115
-                            </p>
+                            <p className="">{parent.address}</p>
+                        </div>
+                        <div className="my-4 flex flex-col justify-between md:flex-row">
+                            <p className="font-bold">Nomor Telepon</p>
+                            <p className="">{parent.phone}</p>
                         </div>
                     </CardContent>
                     <CardFooter>
                         <Button>Edit</Button>
                     </CardFooter>
                 </Card>
-                <Card className="w-full flex-1">
+                <Card className="w-full flex-1 rounded-none md:rounded-lg">
                     <CardHeader>
                         <CardTitle className="text-2xl">Data Anak</CardTitle>
                     </CardHeader>

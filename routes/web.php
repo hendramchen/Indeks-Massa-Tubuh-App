@@ -8,6 +8,9 @@ use App\Http\Controllers\ImtResultController;
 use App\Http\Controllers\ZscoreController;
 use App\Http\Controllers\ChildInfoController;
 use App\Http\Controllers\ParentInfoController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\DistrictController;
+use App\Http\Controllers\ProvinceController;
 
 Route::get('/', function () {
     return Inertia::render('welcome', [
@@ -24,6 +27,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/imt-result/{id}', [ImtResultController::class, 'show'])->name('imt-result.show');
     Route::resource('children', ChildInfoController::class);
     Route::resource('parents', ParentInfoController::class);
+
+    // Route::get('/parents', [ParentInfoController::class, 'index'])->name('parents.index');
+    // Route::get('/parents/{id}', [ParentInfoController::class, 'show'])->name('parents.show');
+    Route::get('/parent_data', [ParentInfoController::class, 'getParents'])->name('parents.data');
+
+    Route::post('/city', [CityController::class, 'store'])->name('city.store');
+    Route::get('/city', [CityController::class, 'index'])->name('city.index');
+    Route::post('/district', [DistrictController::class, 'store'])->name('district.store');
+    Route::get('/district', [DistrictController::class, 'index'])->name('district.index');
+    Route::post('/province', [ProvinceController::class, 'store'])->name('province.store');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
