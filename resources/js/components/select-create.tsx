@@ -11,6 +11,7 @@ interface SelectCreateProps {
     selectedOption: string;
     setSelectedOption: (option: string) => void;
     placeholder: string;
+    hasCreateButton?: boolean;
 }
 
 export default function SelectCreate({
@@ -19,10 +20,11 @@ export default function SelectCreate({
     selectedOption,
     setSelectedOption,
     placeholder,
+    hasCreateButton = true,
 }: SelectCreateProps) {
-    const handleCreateCity = (newCity: string) => {
-        const value = newCity.toLowerCase().replace(/\s+/g, '-');
-        const newOption = { value, label: newCity };
+    const handleCreateOpt = (newOpt: string) => {
+        const value = newOpt.toLowerCase().replace(/\s+/g, '-');
+        const newOption = { value, label: newOpt };
         setOptions([...options, newOption]);
         setSelectedOption(value);
     };
@@ -33,7 +35,7 @@ export default function SelectCreate({
                 options={options}
                 value={selectedOption}
                 onChange={setSelectedOption}
-                onCreateNew={handleCreateCity}
+                onCreateNew={hasCreateButton ? handleCreateOpt : undefined}
                 placeholder="Pilih atau buat baru..."
                 searchPlaceholder={`Cari ${placeholder}...`}
                 emptyText={`Tidak ada ${placeholder} ditemukan.`}

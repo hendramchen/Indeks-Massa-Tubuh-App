@@ -51,7 +51,14 @@ class ParentInfoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'address' => 'required',
+        ]);
+
+        ParentInfo::create($validated);
+
+        return redirect()->route('parents.index');
     }
 
     /**

@@ -101,6 +101,7 @@ export default function ParentFilter({ setFilters }: Props) {
                     setOptions={setCities}
                     selectedOption={selectedCity}
                     setSelectedOption={setSelectedCity}
+                    hasCreateButton={false}
                 />
                 <SelectCreate
                     placeholder="Kecamatan/Desa"
@@ -108,6 +109,7 @@ export default function ParentFilter({ setFilters }: Props) {
                     setOptions={setDistricts}
                     selectedOption={selectedDistrict}
                     setSelectedOption={setSelectedDistrict}
+                    hasCreateButton={false}
                 />
             </CardContent>
             <CardFooter className="flex justify-end gap-2">
