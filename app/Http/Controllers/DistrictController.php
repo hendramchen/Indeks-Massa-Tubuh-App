@@ -15,8 +15,14 @@ class DistrictController extends Controller
 
     public function store(Request $request)
     {
-        District::create([
-            'name' => $request->name,
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
         ]);
+
+        $district = District::firstOrCreate([
+            'name' => $validated['name'],
+        ]);
+
+        return response()->json($district, 201);
     }
 }

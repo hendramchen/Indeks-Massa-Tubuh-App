@@ -23,10 +23,9 @@ export default function SelectCreate({
     hasCreateButton = true,
 }: SelectCreateProps) {
     const handleCreateOpt = (newOpt: string) => {
-        const value = newOpt.toLowerCase().replace(/\s+/g, '-');
-        const newOption = { value, label: newOpt };
+        const newOption = { value: newOpt, label: newOpt };
         setOptions([...options, newOption]);
-        setSelectedOption(value);
+        setSelectedOption(newOpt);
     };
     return (
         <div className="space-y-2">

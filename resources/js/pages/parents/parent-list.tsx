@@ -34,6 +34,14 @@ export default function ParentList() {
             .catch((error) => console.error('Error fetching parents:', error));
     }, [pageLink, filters]);
 
+    const refetchParents = () => {
+        let endpoint = '/parent_data';
+        fetch(endpoint)
+            .then((response) => response.json())
+            .then((data) => setParents(data))
+            .catch((error) => console.error('Error fetching parents:', error));
+    };
+
     const handleFilter = (filters: ParentFilterType) => {
         // Reset to first page when filtering
         setPageLink(null);
@@ -47,7 +55,7 @@ export default function ParentList() {
                 Daftar Orang Tua
             </h1>
             <ParentFilter setFilters={handleFilter} />
-            <ParentCreate />
+            <ParentCreate onParentCreated={refetchParents} />
             {parents && (
                 <ParentTable parents={parents} setPageLink={setPageLink} />
             )}

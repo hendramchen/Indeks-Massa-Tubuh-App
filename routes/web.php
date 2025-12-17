@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/district', [DistrictController::class, 'store'])->name('district.store');
     Route::get('/district', [DistrictController::class, 'index'])->name('district.index');
     Route::post('/province', [ProvinceController::class, 'store'])->name('province.store');
+    Route::get('/province', [ProvinceController::class, 'index'])->name('province.index');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
