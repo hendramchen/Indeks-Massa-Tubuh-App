@@ -73,7 +73,7 @@ class ParentInfoController extends Controller
      */
     public function show(string $id)
     {
-        $parent = ParentInfo::find($id);
+        $parent = ParentInfo::with('children')->find($id);
         if (!$parent) {
             abort(404);
         }
@@ -96,7 +96,26 @@ class ParentInfoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'province' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'district' => 'required|string|max:255',
+            'address' => 'required|string',
+        ]);
+
+        $parent = ParentInfo::find($id);
+        if (!$parent) {
+            abort(404);
+        }
+
+        try {
+            $parent->update($validated);
+            return redirect()->route('parents.show', $parent->id);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menyimpan data');
+        }
     }
 
     /**

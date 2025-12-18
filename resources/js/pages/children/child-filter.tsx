@@ -15,23 +15,27 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { ChildFilterType } from '@/types/child-info';
 import { useState } from 'react';
 
-export default function ChildFilter() {
-    const [nama, setNama] = useState('');
-    const [gender, setGender] = useState<'male' | 'female'>('male');
+interface Props {
+    setFilters: (filters: ChildFilterType) => void;
+}
+
+export default function ChildFilter({ setFilters }: Props) {
+    const [name, setName] = useState('');
+    const [gender, setGender] = useState<'male' | 'female' | 'all'>('all');
 
     const resetFilters = () => {
-        setNama('');
+        setName('');
+        setGender('all');
     };
 
     const handleFilter = () => {
-        // setFilters({
-        //     name: nama,
-        //     phone: phone,
-        //     city: selectedCity,
-        //     district: selectedDistrict,
-        // });
+        setFilters({
+            name,
+            gender,
+        });
     };
 
     return (
@@ -43,10 +47,10 @@ export default function ChildFilter() {
                 <div className="space-y-2">
                     <Label htmlFor="name">Nama</Label>
                     <Input
-                        id="nama"
-                        name="nama"
-                        value={nama}
-                        onChange={(e) => setNama(e.target.value)}
+                        id="name"
+                        name="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         placeholder="Masukkan nama yang ingin difilter"
                     />
                 </div>
@@ -56,7 +60,7 @@ export default function ChildFilter() {
                         name="gender"
                         value={gender}
                         onValueChange={(value) =>
-                            setGender(value as 'male' | 'female')
+                            setGender(value as 'male' | 'female' | 'all')
                         }
                     >
                         <SelectTrigger>
@@ -65,15 +69,16 @@ export default function ChildFilter() {
                         <SelectContent>
                             <SelectItem value="male">Laki-laki</SelectItem>
                             <SelectItem value="female">Perempuan</SelectItem>
+                            <SelectItem value="all">Semua</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-2">
                 <Button variant="outline" onClick={resetFilters}>
-                    Reset
+                    Reset Filter
                 </Button>
-                <Button onClick={handleFilter}>Filter</Button>
+                <Button onClick={handleFilter}>Terapkan Filter</Button>
             </CardFooter>
         </Card>
     );

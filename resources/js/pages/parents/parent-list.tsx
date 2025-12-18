@@ -7,9 +7,9 @@ import ParentCreate from './parent-create';
 import ParentFilter from './parent-filter';
 import ParentTable from './parent-table';
 
-export interface ParentListType {
-    parents: DataWithPagination<ParentType>;
-}
+// export interface ParentListType {
+//     parents: DataWithPagination<ParentType>;
+// }
 
 export default function ParentList() {
     const [parents, setParents] =

@@ -1,12 +1,4 @@
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from '@/components/ui/pagination';
+import PaginationTable from '@/components/pagination-table';
 import {
     Table,
     TableBody,
@@ -15,9 +7,18 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Edit2, Trash } from 'lucide-react';
+import { ChildType } from '@/types/child-info';
+import { DataWithPagination } from '@/types/pagination';
+import { Link } from '@inertiajs/react';
 
-export default function ChildTable() {
+interface ChildTableProps {
+    children: DataWithPagination<ChildType>;
+    setPageLink: (url: string | null) => void;
+}
+
+export default function ChildTable({ children, setPageLink }: ChildTableProps) {
+    if (!children) return null;
+    const { data, links, from } = children;
     return (
         <div className="my-6">
             <Table className="">
@@ -27,41 +28,33 @@ export default function ChildTable() {
                         <TableHead>Nama</TableHead>
                         <TableHead>Gender</TableHead>
                         <TableHead>Tgl Lahir</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell>1</TableCell>
-                        <TableCell>John Doe</TableCell>
-                        <TableCell>Laki-laki</TableCell>
-                        <TableCell>2023-01-15</TableCell>
-                        <TableCell className="flex justify-end gap-4">
-                            <Edit2 className="h-4 w-4 cursor-pointer" />
-                            <Trash className="h-4 w-4 cursor-pointer" />
-                        </TableCell>
-                    </TableRow>
+                    {data.map((child, index) => {
+                        let nomor = from + index;
+                        const rowBg = index % 2 === 0 ? 'bg-white' : '';
+                        return (
+                            <TableRow key={child.id} className={rowBg}>
+                                <TableCell>{nomor}</TableCell>
+                                <TableCell>
+                                    <Link
+                                        href={`/children/${child.id}`}
+                                        className="font-bold text-[#d6336c] hover:underline"
+                                    >
+                                        {child.name}
+                                    </Link>
+                                </TableCell>
+                                <TableCell>{child.gender}</TableCell>
+                                <TableCell>{child.birth_date}</TableCell>
+                            </TableRow>
+                        );
+                    })}
                 </TableBody>
             </Table>
-            <Pagination className="mt-6">
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious href="#" />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">2</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#" />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+            {data.length > 0 && (
+                <PaginationTable links={links} onPageChange={setPageLink} />
+            )}
         </div>
     );
 }

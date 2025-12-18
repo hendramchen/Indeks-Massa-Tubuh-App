@@ -87,3 +87,34 @@ export const getZscoreWithSign = (
     }
     return zScoreWithSign;
 };
+
+export function formatDateToReadable(dateString: string) {
+    // Split the date string into components
+    const [year, month, day] = dateString.split('-').map(Number);
+
+    // Create a date object (uses UTC to avoid timezone issues)
+    const date = new Date(Date.UTC(year, month - 1, day));
+
+    // Month names array
+    const monthNames = [
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember',
+    ];
+
+    // Get the day without leading zero, month name, and year
+    const formattedDay = date.getUTCDate();
+    const formattedMonth = monthNames[date.getUTCMonth()];
+    const formattedYear = date.getUTCFullYear();
+
+    return `${formattedDay} ${formattedMonth} ${formattedYear}`;
+}
