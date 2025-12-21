@@ -7,6 +7,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatDateToReadable } from '@/lib/utils';
 import { ChildType } from '@/types/child-info';
 import { DataWithPagination } from '@/types/pagination';
 import { Link } from '@inertiajs/react';
@@ -46,7 +47,9 @@ export default function ChildTable({ children, setPageLink }: ChildTableProps) {
                                     </Link>
                                 </TableCell>
                                 <TableCell>{child.gender}</TableCell>
-                                <TableCell>{child.birth_date}</TableCell>
+                                <TableCell>
+                                    {formatDateToReadable(child.birth_date)}
+                                </TableCell>
                             </TableRow>
                         );
                     })}

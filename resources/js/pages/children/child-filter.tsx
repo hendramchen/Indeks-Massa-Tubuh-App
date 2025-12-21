@@ -29,6 +29,10 @@ export default function ChildFilter({ setFilters }: Props) {
     const resetFilters = () => {
         setName('');
         setGender('all');
+        setFilters({
+            name: '',
+            gender: 'all',
+        });
     };
 
     const handleFilter = () => {

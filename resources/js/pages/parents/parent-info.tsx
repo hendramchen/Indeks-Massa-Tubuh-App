@@ -1,10 +1,4 @@
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -17,6 +11,7 @@ import SigiziLayout from '@/layouts/sigizi-layout';
 import { ParentType } from '@/types/parent-info';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
+import ParentDelete from './parent-delete';
 import ParentEdit from './parent-edit';
 
 export default function ParentInfo({ parent }: { parent: ParentType }) {
@@ -38,13 +33,20 @@ export default function ParentInfo({ parent }: { parent: ParentType }) {
     return (
         <SigiziLayout>
             <Head title={`Detail Info Orang Tua`} />
-            <div className="flex items-center justify-center gap-4 pt-6 pb-4 md:justify-start md:pt-8 md:pb-4">
-                <Link href="/parents">
-                    <ArrowLeft className="h-8 w-8" />
-                </Link>
-                <h1 className="text-3xl font-semibold md:text-4xl">
-                    Informasi Orang Tua
-                </h1>
+            <div className="flex flex-col items-center justify-between gap-4 pt-6 pb-4 md:flex-row md:pt-8 md:pb-4">
+                <div className="flex items-center gap-4">
+                    <Link href="/parents">
+                        <ArrowLeft className="h-8 w-8" />
+                    </Link>
+                    <h1 className="text-3xl font-semibold md:text-4xl">
+                        Informasi Orang Tua
+                    </h1>
+                </div>
+
+                <div className="flex gap-2">
+                    <ParentEdit parent={parent} />
+                    <ParentDelete />
+                </div>
             </div>
 
             <div className="flex flex-col items-start gap-4 py-4 md:flex-row">
@@ -80,9 +82,6 @@ export default function ParentInfo({ parent }: { parent: ParentType }) {
                             <p className="">{parent.address}</p>
                         </div>
                     </CardContent>
-                    <CardFooter>
-                        <ParentEdit parent={parent} />
-                    </CardFooter>
                 </Card>
                 <Card className="w-full flex-1 rounded-none md:rounded-lg">
                     <CardHeader>

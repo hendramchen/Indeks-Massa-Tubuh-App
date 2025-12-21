@@ -30,7 +30,7 @@ class ChildInfoController extends Controller
             }
         }
         
-        $children = $query->paginate(2);
+        $children = $query->paginate(10);
         return response()->json($children);
     }
 

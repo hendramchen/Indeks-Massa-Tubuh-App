@@ -124,7 +124,7 @@ export default function ParentEdit({ parent }: ParentEditProps) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button>Edit</Button>
+                <Button className="w-full">Edit</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogTitle>Edit Data Orang Tua</DialogTitle>

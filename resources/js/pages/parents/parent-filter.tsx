@@ -58,6 +58,12 @@ export default function ParentFilter({ setFilters }: Props) {
         setPhone('');
         setSelectedCity('');
         setSelectedDistrict('');
+        setFilters({
+            name: '',
+            phone: '',
+            city: '',
+            district: '',
+        });
     };
 
     const handleFilter = () => {
