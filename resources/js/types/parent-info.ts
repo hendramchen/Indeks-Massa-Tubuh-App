@@ -1,5 +1,5 @@
 export type ParentType = {
-    id: number;
+    id: number | string;
     name: string;
     phone: string;
     province: string;

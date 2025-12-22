@@ -56,7 +56,7 @@ class ChildInfoController extends Controller
 
         try {
             ChildInfo::create($validated);
-            return redirect()->route('children.index');
+            return redirect()->route('parents.show', $validated['parent_info_id']);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menyimpan data');
         }

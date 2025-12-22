@@ -7,10 +7,16 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
+import { router } from '@inertiajs/react';
 import { useState } from 'react';
-export default function ParentDelete() {
+
+export default function ParentDelete({ id }: { id: number | string }) {
     const [open, setOpen] = useState(false);
     const handleCancel = () => {
+        setOpen(false);
+    };
+    const handleDelete = () => {
+        router.delete(`/parents/${id}`);
         setOpen(false);
     };
     return (
@@ -40,7 +46,7 @@ export default function ParentDelete() {
                     <Button
                         type="submit"
                         variant="destructive"
-                        onClick={handleCancel}
+                        onClick={handleDelete}
                     >
                         Hapus
                     </Button>

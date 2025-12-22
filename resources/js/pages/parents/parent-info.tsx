@@ -8,27 +8,29 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import SigiziLayout from '@/layouts/sigizi-layout';
+import { formatDateToReadable } from '@/lib/utils';
 import { ParentType } from '@/types/parent-info';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
+import ParentCreateChild from './parent-create-child';
 import ParentDelete from './parent-delete';
 import ParentEdit from './parent-edit';
 
 export default function ParentInfo({ parent }: { parent: ParentType }) {
     const children = parent.children ?? [];
 
-    const getAgeInMonths = (birthDate: string) => {
-        const birth = new Date(birthDate);
-        const now = new Date();
-        if (Number.isNaN(birth.getTime())) return null;
+    // const getAgeInMonths = (birthDate: string) => {
+    //     const birth = new Date(birthDate);
+    //     const now = new Date();
+    //     if (Number.isNaN(birth.getTime())) return null;
 
-        let months =
-            (now.getFullYear() - birth.getFullYear()) * 12 +
-            (now.getMonth() - birth.getMonth());
+    //     let months =
+    //         (now.getFullYear() - birth.getFullYear()) * 12 +
+    //         (now.getMonth() - birth.getMonth());
 
-        if (now.getDate() < birth.getDate()) months -= 1;
-        return Math.max(0, months);
-    };
+    //     if (now.getDate() < birth.getDate()) months -= 1;
+    //     return Math.max(0, months);
+    // };
 
     return (
         <SigiziLayout>
@@ -45,7 +47,7 @@ export default function ParentInfo({ parent }: { parent: ParentType }) {
 
                 <div className="flex gap-2">
                     <ParentEdit parent={parent} />
-                    <ParentDelete />
+                    <ParentDelete id={parent.id} />
                 </div>
             </div>
 
@@ -85,15 +87,22 @@ export default function ParentInfo({ parent }: { parent: ParentType }) {
                 </Card>
                 <Card className="w-full flex-1 rounded-none md:rounded-lg">
                     <CardHeader>
-                        <CardTitle className="text-2xl">Data Anak</CardTitle>
+                        <CardTitle className="flex items-center justify-between">
+                            <h1 className="text-2xl">Data Anak</h1>
+                            <ParentCreateChild
+                                parentInfoId={parent.id}
+                                onParentCreated={() => {}}
+                            />
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="mx-0 px-0">
                         <Table>
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="pl-4">Nama</TableHead>
-                                    <TableHead>Umur</TableHead>
+                                    <TableHead>Tgl Lahir</TableHead>
                                     <TableHead>Gender</TableHead>
+                                    <TableHead>&nbsp;</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -104,31 +113,27 @@ export default function ParentInfo({ parent }: { parent: ParentType }) {
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    children.map((child) => {
-                                        const ageMonths = getAgeInMonths(
-                                            child.birth_date,
-                                        );
-                                        return (
-                                            <TableRow key={child.id}>
-                                                <TableCell className="pl-4">
-                                                    <Link
-                                                        href={`/children/${child.id}`}
-                                                        className="font-bold text-[#d6336c] hover:underline"
-                                                    >
-                                                        {child.name}
-                                                    </Link>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {ageMonths === null
-                                                        ? '-'
-                                                        : `${ageMonths} Bulan`}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {child.gender}
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })
+                                    children.map((child) => (
+                                        <TableRow key={child.id}>
+                                            <TableCell className="pl-4">
+                                                <Link
+                                                    href={`/children/${child.id}`}
+                                                    className="font-bold text-[#d6336c] hover:underline"
+                                                >
+                                                    {child.name}
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell>
+                                                {formatDateToReadable(
+                                                    child.birth_date,
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {child.gender}
+                                            </TableCell>
+                                            <TableCell>Edit | Hapus</TableCell>
+                                        </TableRow>
+                                    ))
                                 )}
                             </TableBody>
                         </Table>

@@ -123,6 +123,11 @@ class ParentInfoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $parent = ParentInfo::find($id);
+        if ($parent) {
+            $parent->delete();
+            return redirect()->route('parents.index');
+        }
+        return redirect()->back()->with('error', 'Gagal menghapus data');
     }
 }
