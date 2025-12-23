@@ -118,3 +118,11 @@ export function formatDateToReadable(dateString: string) {
 
     return `${formattedDay} ${formattedMonth} ${formattedYear}`;
 }
+
+export function genderToLabel(gender: string) {
+    const labels: Record<string, string> = {
+        male: 'Laki-laki',
+        female: 'Perempuan',
+    };
+    return labels[gender] ?? gender;
+}

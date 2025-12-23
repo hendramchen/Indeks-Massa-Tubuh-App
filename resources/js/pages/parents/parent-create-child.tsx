@@ -22,13 +22,9 @@ import { FormEvent, useState } from 'react';
 
 interface ParentCreateProps {
     parentInfoId: number | string;
-    onParentCreated?: () => void;
 }
 
-export default function ParentCreateChild({
-    parentInfoId,
-    onParentCreated,
-}: ParentCreateProps) {
+export default function ParentCreateChild({ parentInfoId }: ParentCreateProps) {
     const [open, setOpen] = useState(false);
 
     const { data, setData, post, processing, errors, reset, clearErrors } =
@@ -54,9 +50,6 @@ export default function ParentCreateChild({
             onSuccess: () => {
                 setOpen(false);
                 reset();
-                if (onParentCreated) {
-                    onParentCreated();
-                }
             },
         });
     };
@@ -106,6 +99,11 @@ export default function ParentCreateChild({
                                     setData('birth_date', e.target.value)
                                 }
                             />
+                            {errors.birth_date && (
+                                <p className="text-sm text-red-600">
+                                    {errors.birth_date}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="gender">Jenis Kelamin</Label>
@@ -131,6 +129,11 @@ export default function ParentCreateChild({
                                     </SelectItem>
                                 </SelectContent>
                             </Select>
+                            {errors.gender && (
+                                <p className="text-sm text-red-600">
+                                    {errors.gender}
+                                </p>
+                            )}
                         </div>
 
                         <DialogFooter className="flex justify-end gap-2">

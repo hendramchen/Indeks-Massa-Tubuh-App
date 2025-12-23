@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { formatDateToReadable } from '@/lib/utils';
+import { formatDateToReadable, genderToLabel } from '@/lib/utils';
 import { ChildType } from '@/types/child-info';
 import { ParentType } from '@/types/parent-info';
 import { ArrowRight } from 'lucide-react';
@@ -18,8 +18,8 @@ export function ChildSidebar({ child, parent }: ChildSidebarProps) {
                         Data Anak
                     </h1>
                     <div className="flex flex-col justify-between md:flex-row">
-                        <h1 className="font-bold">Jenis Kelamain</h1>
-                        <p>{child.gender}</p>
+                        <h1 className="font-bold">Jenis Kelamin</h1>
+                        <p>{genderToLabel(child.gender)}</p>
                     </div>
                     <div className="flex flex-col justify-between md:flex-row">
                         <h1 className="font-bold">Tanggal Lahir</h1>

@@ -8,5 +8,5 @@ export type ChildType = {
     name: string;
     gender: string;
     birth_date: string;
-    parent_id: number;
+    parent_info_id: number;
 };

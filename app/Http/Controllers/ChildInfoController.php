@@ -89,7 +89,23 @@ class ChildInfoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'gender' => 'required',
+            'birth_date' => 'required|date',
+        ]);
+
+        $child = ChildInfo::find($id);
+        if (!$child) {
+            abort(404);
+        }
+
+        try {
+            $child->update($validated);
+            return redirect()->route('children.show', $child->id);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menyimpan data');
+        }
     }
 
     /**
@@ -97,6 +113,11 @@ class ChildInfoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $child = ChildInfo::find($id);
+        if ($child) {
+            $child->delete();
+            return redirect()->back();
+        }
+        return redirect()->back()->with('error', 'Gagal menghapus data');
     }
 }

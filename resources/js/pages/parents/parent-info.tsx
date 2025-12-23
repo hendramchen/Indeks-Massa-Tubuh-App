@@ -8,13 +8,15 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import SigiziLayout from '@/layouts/sigizi-layout';
-import { formatDateToReadable } from '@/lib/utils';
+import { formatDateToReadable, genderToLabel } from '@/lib/utils';
 import { ParentType } from '@/types/parent-info';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 import ParentCreateChild from './parent-create-child';
 import ParentDelete from './parent-delete';
+import { ParentDeleteChild } from './parent-delete-child';
 import ParentEdit from './parent-edit';
+import ParentEditChild from './parent-edit-child';
 
 export default function ParentInfo({ parent }: { parent: ParentType }) {
     const children = parent.children ?? [];
@@ -89,10 +91,7 @@ export default function ParentInfo({ parent }: { parent: ParentType }) {
                     <CardHeader>
                         <CardTitle className="flex items-center justify-between">
                             <h1 className="text-2xl">Data Anak</h1>
-                            <ParentCreateChild
-                                parentInfoId={parent.id}
-                                onParentCreated={() => {}}
-                            />
+                            <ParentCreateChild parentInfoId={parent.id} />
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="mx-0 px-0">
@@ -129,9 +128,16 @@ export default function ParentInfo({ parent }: { parent: ParentType }) {
                                                 )}
                                             </TableCell>
                                             <TableCell>
-                                                {child.gender}
+                                                {genderToLabel(child.gender)}
                                             </TableCell>
-                                            <TableCell>Edit | Hapus</TableCell>
+                                            <TableCell className="flex items-center justify-end gap-4">
+                                                <ParentEditChild
+                                                    child={child}
+                                                />
+                                                <ParentDeleteChild
+                                                    id={child.id}
+                                                />
+                                            </TableCell>
                                         </TableRow>
                                     ))
                                 )}
