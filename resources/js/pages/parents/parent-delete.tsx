@@ -8,6 +8,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { router } from '@inertiajs/react';
+import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 export default function ParentDelete({ id }: { id: number | string }) {
@@ -22,8 +23,8 @@ export default function ParentDelete({ id }: { id: number | string }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="destructive" className="w-full">
-                    Delete
+                <Button variant="outline" className="w-full">
+                    <Trash2 /> Hapus
                 </Button>
             </DialogTrigger>
             <DialogContent>

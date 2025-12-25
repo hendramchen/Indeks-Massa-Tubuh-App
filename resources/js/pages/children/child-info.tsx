@@ -19,8 +19,9 @@ import { formatDateToReadable } from '@/lib/utils';
 import { ChildType } from '@/types/child-info';
 import { ParentType } from '@/types/parent-info';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, Download, Plus } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import ChildCreateMeasure from './child-create-measure';
 import ChildMeasurement from './child-measurement';
 import { ChildSidebar } from './child-sidebar';
 
@@ -66,9 +67,11 @@ const data = [
 export default function ChildInfo({
     child,
     parent,
+    ageString,
 }: {
     child: ChildType;
     parent: ParentType;
+    ageString: string;
 }) {
     return (
         <SigiziLayout>
@@ -83,16 +86,14 @@ export default function ChildInfo({
                     </h1>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="default">
-                        <Plus className="mr-1 h-4 w-4" /> Tambah Data
-                    </Button>
+                    <ChildCreateMeasure id={child.id} />
                     <Button variant="outline">
                         <Download className="mr-1 h-4 w-4" /> Download Report
                     </Button>
                 </div>
             </div>
             <div className="flex flex-col items-start gap-4 py-4 md:flex-row">
-                <ChildSidebar child={child} parent={parent} />
+                <ChildSidebar child={child} parent={parent} age={ageString} />
                 <div className="flex w-full flex-col gap-4 md:w-2/3">
                     <Card className="rounded-none md:rounded-lg">
                         <CardHeader>

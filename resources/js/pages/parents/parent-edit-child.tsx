@@ -23,9 +23,13 @@ import { FormEvent, useEffect, useState } from 'react';
 
 interface ParentEditChildProps {
     child: ChildType;
+    showEditText?: boolean;
 }
 
-export default function ParentEditChild({ child }: ParentEditChildProps) {
+export default function ParentEditChild({
+    child,
+    showEditText = false,
+}: ParentEditChildProps) {
     const [open, setOpen] = useState(false);
 
     const { data, setData, processing, errors, reset, clearErrors } = useForm({
@@ -64,7 +68,14 @@ export default function ParentEditChild({ child }: ParentEditChildProps) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Edit2 className="h-4 w-4 cursor-pointer text-blue-600" />
+                {showEditText ? (
+                    <Button variant="outline">
+                        <Edit2 className="h-4 w-4 cursor-pointer text-gray-700" />{' '}
+                        Edit
+                    </Button>
+                ) : (
+                    <Edit2 className="h-4 w-4 cursor-pointer text-gray-700" />
+                )}
             </DialogTrigger>
             <DialogContent>
                 <DialogTitle>Edit Data Anak</DialogTitle>
@@ -90,6 +101,7 @@ export default function ParentEditChild({ child }: ParentEditChildProps) {
                         <Label htmlFor="birthdate">Tanggal Lahir</Label>
                         <Input
                             id="birth_date"
+                            className="w-full bg-gray-700 font-semibold text-white"
                             name="birth_date"
                             type="date"
                             value={data.birth_date}

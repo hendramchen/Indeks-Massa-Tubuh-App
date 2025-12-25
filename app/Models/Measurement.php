@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 
-class ImtResult extends Model
+class Measurement extends Model
 {
     protected $fillable = [
         'age',
@@ -21,6 +22,7 @@ class ImtResult extends Model
         'wh_nearest',
         'wh_zscore',
         'wh_category',
+        'imt_actual',
         'imt_nearest',
         'imt_zscore',
         'imt_category',
@@ -28,4 +30,9 @@ class ImtResult extends Model
         'user_id',
         'child_info_id'
     ];
+
+    public function childInfo(): BelongsTo
+    {
+        return $this->belongsTo(ChildInfo::class);
+    }
 }

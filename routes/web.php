@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/parents/{id}', [ParentInfoController::class, 'show'])->name('parents.show');
     Route::get('/parent_data', [ParentInfoController::class, 'getParents'])->name('parents.data');
     Route::get('/child_data', [ChildInfoController::class, 'getChildren'])->name('children.data');
+    Route::post('/calculate/{childId}', [ChildInfoController::class, 'calculate'])->name('calculate');
 
     Route::post('/city', [CityController::class, 'store'])->name('city.store');
     Route::get('/city', [CityController::class, 'index'])->name('city.index');

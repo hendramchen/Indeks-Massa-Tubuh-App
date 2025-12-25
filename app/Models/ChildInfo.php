@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ChildInfo extends Model
 {
@@ -12,5 +13,10 @@ class ChildInfo extends Model
     public function parentInfo():BelongsTo
     {
         return $this->belongsTo(ParentInfo::class);
+    }
+
+    public function measurements(): HasMany
+    {
+        return $this->hasMany(Measurement::class);
     }
 }

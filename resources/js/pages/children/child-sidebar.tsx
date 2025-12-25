@@ -3,20 +3,26 @@ import { formatDateToReadable, genderToLabel } from '@/lib/utils';
 import { ChildType } from '@/types/child-info';
 import { ParentType } from '@/types/parent-info';
 import { ArrowRight } from 'lucide-react';
+import ParentEditChild from '../parents/parent-edit-child';
 
 interface ChildSidebarProps {
     child: ChildType;
     parent: ParentType;
+    age: string;
 }
 
-export function ChildSidebar({ child, parent }: ChildSidebarProps) {
+export function ChildSidebar({ child, parent, age }: ChildSidebarProps) {
     return (
         <div className="flex w-full flex-col gap-4 md:w-1/3">
             <Card className="w-full rounded-none md:rounded-lg">
                 <CardContent className="flex flex-col gap-4">
-                    <h1 className="text-xl font-semibold text-[#d6336c]">
-                        Data Anak
-                    </h1>
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-xl font-semibold text-[#d6336c]">
+                            Data Anak
+                        </h1>
+                        <ParentEditChild child={child} showEditText={true} />
+                    </div>
+
                     <div className="flex flex-col justify-between md:flex-row">
                         <h1 className="font-bold">Jenis Kelamin</h1>
                         <p>{genderToLabel(child.gender)}</p>
@@ -24,6 +30,10 @@ export function ChildSidebar({ child, parent }: ChildSidebarProps) {
                     <div className="flex flex-col justify-between md:flex-row">
                         <h1 className="font-bold">Tanggal Lahir</h1>
                         <p>{formatDateToReadable(child.birth_date)}</p>
+                    </div>
+                    <div className="flex flex-col justify-between md:flex-row">
+                        <h1 className="font-bold">Umur</h1>
+                        <p>{age}</p>
                     </div>
                     <hr />
                     <h1 className="text-xl font-semibold text-[#d6336c]">

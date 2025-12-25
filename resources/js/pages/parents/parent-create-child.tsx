@@ -92,6 +92,7 @@ export default function ParentCreateChild({ parentInfoId }: ParentCreateProps) {
                             <Label htmlFor="birthdate">Tanggal Lahir</Label>
                             <Input
                                 id="birth_date"
+                                className="w-full bg-gray-700 font-semibold text-white"
                                 name="birth_date"
                                 type="date"
                                 value={data.birth_date}
