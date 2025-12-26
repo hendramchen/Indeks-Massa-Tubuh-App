@@ -16,14 +16,17 @@ import {
 } from '@/components/ui/table';
 import SigiziLayout from '@/layouts/sigizi-layout';
 import { formatDateToReadable } from '@/lib/utils';
-import { ChildType } from '@/types/child-info';
+import { ChildType, HistoryType, MeasurementType } from '@/types/child-info';
 import { ParentType } from '@/types/parent-info';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Download } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import ChildBio from './child-bio';
 import ChildCreateMeasure from './child-create-measure';
+import ChildHistory from './child-history';
 import ChildMeasurement from './child-measurement';
-import { ChildSidebar } from './child-sidebar';
+import ChildSummary from './child-summary';
 
 const data = [
     {
@@ -64,15 +67,60 @@ const data = [
     },
 ];
 
+interface Props {
+    child: ChildType;
+    parent: ParentType;
+    ageString: string;
+    measurements: MeasurementType[];
+}
+
 export default function ChildInfo({
     child,
     parent,
     ageString,
-}: {
-    child: ChildType;
-    parent: ParentType;
-    ageString: string;
-}) {
+    measurements,
+}: Props) {
+    const [measureRecords, setMeasureRecords] =
+        useState<MeasurementType[]>(measurements);
+    const [selectedMeasureRecord, setSelectedMeasureRecord] =
+        useState<MeasurementType | null>(null);
+    const [historyData, setHistoryData] = useState<HistoryType[]>([]);
+    const [selectedHistory, setSelectedHistory] = useState<HistoryType | null>(
+        null,
+    );
+
+    const summary = {
+        bbCategory: '',
+        pbCategory: '',
+        bbPbCategory: '',
+        imtCategory: '',
+    };
+
+    useEffect(() => {
+        const sortedMeasurements = measurements.sort((a, b) =>
+            b.note_date.localeCompare(a.note_date),
+        );
+        setHistoryData(
+            sortedMeasurements.map((measure, index) => ({
+                id: index,
+                note_date: measure.note_date,
+            })),
+        );
+        setSelectedHistory({
+            id: 0,
+            note_date: sortedMeasurements[0].note_date,
+        });
+        setMeasureRecords(sortedMeasurements);
+    }, [measurements]);
+
+    const handleSelectMeasureRecord = (record: MeasurementType) => {
+        setSelectedMeasureRecord(record);
+    };
+
+    const handleSelectHistory = (history: HistoryType) => {
+        setSelectedHistory(history);
+        setSelectedMeasureRecord(measureRecords[history.id]);
+    };
     return (
         <SigiziLayout>
             <Head title={`Detail Informasi Anak`} />
@@ -93,7 +141,24 @@ export default function ChildInfo({
                 </div>
             </div>
             <div className="flex flex-col items-start gap-4 py-4 md:flex-row">
-                <ChildSidebar child={child} parent={parent} age={ageString} />
+                <div className="flex w-full flex-col gap-4 md:w-1/3">
+                    <Card className="w-full rounded-none md:rounded-lg">
+                        <CardContent className="flex flex-col gap-4">
+                            <ChildBio
+                                child={child}
+                                parent={parent}
+                                age={ageString}
+                            />
+                            <ChildHistory
+                                historyData={[]}
+                                // historyData={historyData}
+                                selectedHistory={selectedHistory}
+                                handleSelectHistory={handleSelectHistory}
+                            />
+                        </CardContent>
+                    </Card>
+                    <ChildSummary summary={summary} />
+                </div>
                 <div className="flex w-full flex-col gap-4 md:w-2/3">
                     <Card className="rounded-none md:rounded-lg">
                         <CardHeader>
@@ -101,7 +166,10 @@ export default function ChildInfo({
                                 Pengukuran Fisik
                             </CardTitle>
                             <CardDescription>
-                                {formatDateToReadable('2025-12-18')}
+                                {selectedMeasureRecord?.note_date &&
+                                    formatDateToReadable(
+                                        selectedMeasureRecord.note_date,
+                                    )}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="flex w-full flex-col flex-wrap gap-4 md:flex-row">
@@ -121,7 +189,10 @@ export default function ChildInfo({
                                 Berat Badan menurut Umur (BB/U)
                             </CardTitle>
                             <CardDescription>
-                                {formatDateToReadable('2025-12-18')}
+                                {selectedMeasureRecord?.note_date &&
+                                    formatDateToReadable(
+                                        selectedMeasureRecord.note_date,
+                                    )}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="flex flex-col flex-wrap gap-4 p-0 md:flex-row">
@@ -188,14 +259,35 @@ export default function ChildInfo({
                     <ChildMeasurement
                         title="Panjang Badan menurut Umur (PB/U)"
                         data={['2SD', '13', '14', 'Normal']}
+                        description={
+                            selectedMeasureRecord?.note_date
+                                ? formatDateToReadable(
+                                      selectedMeasureRecord.note_date,
+                                  )
+                                : ''
+                        }
                     />
                     <ChildMeasurement
                         title="Berat Badan menurut Panjang Badan (BB/PB)"
                         data={['3SD', '15', '15', 'Normal']}
+                        description={
+                            selectedMeasureRecord?.note_date
+                                ? formatDateToReadable(
+                                      selectedMeasureRecord.note_date,
+                                  )
+                                : ''
+                        }
                     />
                     <ChildMeasurement
                         title="Indeks Massa Tubuh menurut Umur (IMT/U)"
                         data={['-2SD', '14', '15', 'Normal']}
+                        description={
+                            selectedMeasureRecord?.note_date
+                                ? formatDateToReadable(
+                                      selectedMeasureRecord.note_date,
+                                  )
+                                : ''
+                        }
                     />
                 </div>
             </div>

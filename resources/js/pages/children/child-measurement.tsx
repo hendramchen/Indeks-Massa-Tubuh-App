@@ -13,15 +13,16 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { formatDateToReadable } from '@/lib/utils';
 
 interface ChildMeasurementProps {
     title: string;
+    description: string;
     data: string[];
 }
 
 export default function ChildMeasurement({
     title,
+    description,
     data,
 }: ChildMeasurementProps) {
     return (
@@ -30,9 +31,7 @@ export default function ChildMeasurement({
                 <CardTitle className="text-xl font-semibold text-[#d6336c]">
                     {title}
                 </CardTitle>
-                <CardDescription>
-                    {formatDateToReadable('2025-12-18')}
-                </CardDescription>
+                <CardDescription>{description}</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col flex-wrap gap-4 p-0 md:flex-row">
                 <Table>
