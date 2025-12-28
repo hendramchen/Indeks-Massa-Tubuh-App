@@ -75,7 +75,7 @@ class ChildInfoController extends Controller
             abort(404);
         }
         $parent = $child->parentInfo;
-        $measurements = $child->measurements;
+        $measurements = $child->measurements()->orderByDesc('note_date')->get();
         $measureAction = new MeasureAction();
         $ageInfo = $measureAction->getAgeFromBirthDate($child->birth_date);
         $ageString = $ageInfo['mode'] === 'months' ? $ageInfo['total_months'] . ' bulan' : $ageInfo['years'] . ' tahun ' . $ageInfo['months'] . ' bulan';

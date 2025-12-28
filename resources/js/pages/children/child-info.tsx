@@ -16,7 +16,12 @@ import {
 } from '@/components/ui/table';
 import SigiziLayout from '@/layouts/sigizi-layout';
 import { formatDateToReadable } from '@/lib/utils';
-import { ChildType, HistoryType, MeasurementType } from '@/types/child-info';
+import {
+    ChildType,
+    HistoryType,
+    MeasurementType,
+    SummaryType,
+} from '@/types/child-info';
 import { ParentType } from '@/types/parent-info';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Download } from 'lucide-react';
@@ -88,29 +93,22 @@ export default function ChildInfo({
     const [selectedHistory, setSelectedHistory] = useState<HistoryType | null>(
         null,
     );
-
-    const summary = {
-        bbCategory: '',
-        pbCategory: '',
-        bbPbCategory: '',
-        imtCategory: '',
-    };
+    const [currentSummary, setCurrentSummary] = useState<SummaryType | null>(
+        null,
+    );
 
     useEffect(() => {
-        const sortedMeasurements = measurements.sort((a, b) =>
-            b.note_date.localeCompare(a.note_date),
-        );
-        setHistoryData(
-            sortedMeasurements.map((measure, index) => ({
-                id: index,
-                note_date: measure.note_date,
-            })),
-        );
+        if (measurements.length === 0) return;
+        const histories = measurements.map((measure, index) => ({
+            id: index,
+            note_date: measure.note_date,
+        }));
+        setHistoryData(histories);
         setSelectedHistory({
             id: 0,
-            note_date: sortedMeasurements[0].note_date,
+            note_date: measurements[0].note_date,
         });
-        setMeasureRecords(sortedMeasurements);
+        setSelectedMeasureRecord(measurements[0]);
     }, [measurements]);
 
     const handleSelectMeasureRecord = (record: MeasurementType) => {
@@ -120,6 +118,13 @@ export default function ChildInfo({
     const handleSelectHistory = (history: HistoryType) => {
         setSelectedHistory(history);
         setSelectedMeasureRecord(measureRecords[history.id]);
+        const summ = {
+            bbCategory: measureRecords[history.id].weight_category,
+            pbCategory: measureRecords[history.id].height_category,
+            bbPbCategory: measureRecords[history.id].wh_category,
+            imtCategory: measureRecords[history.id].imt_category,
+        };
+        setCurrentSummary(summ);
     };
     return (
         <SigiziLayout>
@@ -150,14 +155,13 @@ export default function ChildInfo({
                                 age={ageString}
                             />
                             <ChildHistory
-                                historyData={[]}
-                                // historyData={historyData}
+                                historyData={historyData}
                                 selectedHistory={selectedHistory}
                                 handleSelectHistory={handleSelectHistory}
                             />
                         </CardContent>
                     </Card>
-                    <ChildSummary summary={summary} />
+                    <ChildSummary summary={currentSummary} />
                 </div>
                 <div className="flex w-full flex-col gap-4 md:w-2/3">
                     <Card className="rounded-none md:rounded-lg">
@@ -175,11 +179,11 @@ export default function ChildInfo({
                         <CardContent className="flex w-full flex-col flex-wrap gap-4 md:flex-row">
                             <div className="flex-1">
                                 <h1 className="font-bold">Berat Badan</h1>
-                                <p>14 kg</p>
+                                <p>{selectedMeasureRecord?.weight} kg</p>
                             </div>
                             <div className="flex-1">
                                 <h1 className="font-bold">Panjang Badan</h1>
-                                <p>140 cm</p>
+                                <p>{selectedMeasureRecord?.height} cm</p>
                             </div>
                         </CardContent>
                     </Card>
@@ -256,39 +260,51 @@ export default function ChildInfo({
                             </LineChart>
                         </CardContent>
                     </Card>
-                    <ChildMeasurement
-                        title="Panjang Badan menurut Umur (PB/U)"
-                        data={['2SD', '13', '14', 'Normal']}
-                        description={
-                            selectedMeasureRecord?.note_date
-                                ? formatDateToReadable(
-                                      selectedMeasureRecord.note_date,
-                                  )
-                                : ''
-                        }
-                    />
-                    <ChildMeasurement
-                        title="Berat Badan menurut Panjang Badan (BB/PB)"
-                        data={['3SD', '15', '15', 'Normal']}
-                        description={
-                            selectedMeasureRecord?.note_date
-                                ? formatDateToReadable(
-                                      selectedMeasureRecord.note_date,
-                                  )
-                                : ''
-                        }
-                    />
-                    <ChildMeasurement
-                        title="Indeks Massa Tubuh menurut Umur (IMT/U)"
-                        data={['-2SD', '14', '15', 'Normal']}
-                        description={
-                            selectedMeasureRecord?.note_date
-                                ? formatDateToReadable(
-                                      selectedMeasureRecord.note_date,
-                                  )
-                                : ''
-                        }
-                    />
+                    {selectedMeasureRecord &&
+                        selectedMeasureRecord.height_nearest && (
+                            <ChildMeasurement
+                                title="Panjang Badan menurut Umur (PB/U)"
+                                data={[
+                                    selectedMeasureRecord.height_zscore.toString(),
+                                    selectedMeasureRecord.height_nearest.toString(),
+                                    selectedMeasureRecord.height.toString(),
+                                    selectedMeasureRecord.height_category,
+                                ]}
+                                description={formatDateToReadable(
+                                    selectedMeasureRecord.note_date,
+                                )}
+                            />
+                        )}
+                    {selectedMeasureRecord &&
+                        selectedMeasureRecord.wh_nearest && (
+                            <ChildMeasurement
+                                title="Berat Badan menurut Panjang Badan (BB/PB)"
+                                data={[
+                                    selectedMeasureRecord.wh_zscore.toString(),
+                                    selectedMeasureRecord.wh_nearest.toString(),
+                                    selectedMeasureRecord.weight.toString(),
+                                    selectedMeasureRecord.wh_category,
+                                ]}
+                                description={formatDateToReadable(
+                                    selectedMeasureRecord.note_date,
+                                )}
+                            />
+                        )}
+                    {selectedMeasureRecord &&
+                        selectedMeasureRecord.imt_nearest && (
+                            <ChildMeasurement
+                                title="Indeks Massa Tubuh menurut Umur (IMT/U)"
+                                data={[
+                                    selectedMeasureRecord.imt_zscore.toString(),
+                                    selectedMeasureRecord.imt_nearest.toString(),
+                                    selectedMeasureRecord.imt_actual.toString(),
+                                    selectedMeasureRecord.imt_category,
+                                ]}
+                                description={formatDateToReadable(
+                                    selectedMeasureRecord.note_date,
+                                )}
+                            />
+                        )}
                 </div>
             </div>
         </SigiziLayout>

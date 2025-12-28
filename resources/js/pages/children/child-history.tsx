@@ -30,6 +30,7 @@ export default function ChildHistory({
                                 selectedHistory === history && 'bg-gray-50',
                             )}
                             onClick={() => handleSelectHistory(history)}
+                            key={history.id}
                         >
                             <p
                                 className={cn(

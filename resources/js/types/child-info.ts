@@ -40,3 +40,10 @@ export type HistoryType = {
     id: number;
     note_date: string;
 };
+
+export type SummaryType = {
+    bbCategory: string;
+    pbCategory: string;
+    bbPbCategory: string;
+    imtCategory: string;
+};
