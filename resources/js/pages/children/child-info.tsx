@@ -6,15 +6,8 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import SigiziLayout from '@/layouts/sigizi-layout';
+import getChartBB from '@/lib/chart-func';
 import { formatDateToReadable } from '@/lib/utils';
 import {
     ChildType,
@@ -33,7 +26,7 @@ import ChildHistory from './child-history';
 import ChildMeasurement from './child-measurement';
 import ChildSummary from './child-summary';
 
-const data = [
+const chartData = [
     {
         age: 0,
         weight: 2,
@@ -96,6 +89,11 @@ export default function ChildInfo({
     const [currentSummary, setCurrentSummary] = useState<SummaryType | null>(
         null,
     );
+    const [chartBB, setChartBB] = useState([]);
+    const chartDataBB = getChartBB(42, 14);
+    console.log(chartDataBB);
+    // const [chartPB, setChartPB] = useState([]);
+    // const [chartIMT, setChartIMT] = useState([]);
 
     useEffect(() => {
         if (measurements.length === 0) return;
@@ -110,10 +108,6 @@ export default function ChildInfo({
         });
         setSelectedMeasureRecord(measurements[0]);
     }, [measurements]);
-
-    const handleSelectMeasureRecord = (record: MeasurementType) => {
-        setSelectedMeasureRecord(record);
-    };
 
     const handleSelectHistory = (history: HistoryType) => {
         setSelectedHistory(history);
@@ -187,79 +181,52 @@ export default function ChildInfo({
                             </div>
                         </CardContent>
                     </Card>
-                    <Card className="rounded-none md:rounded-lg">
-                        <CardHeader>
-                            <CardTitle className="text-xl font-semibold text-[#d6336c]">
-                                Berat Badan menurut Umur (BB/U)
-                            </CardTitle>
-                            <CardDescription>
-                                {selectedMeasureRecord?.note_date &&
-                                    formatDateToReadable(
-                                        selectedMeasureRecord.note_date,
-                                    )}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex flex-col flex-wrap gap-4 p-0 md:flex-row">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Z-Score</TableHead>
-                                        <TableHead>Aktual</TableHead>
-                                        <TableHead>Normal</TableHead>
-                                        <TableHead>Kategori</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell>-2SD</TableCell>
-                                        <TableCell>14</TableCell>
-                                        <TableCell>15</TableCell>
-                                        <TableCell>Normal</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                            <LineChart
-                                style={{
-                                    width: '100%',
-                                    aspectRatio: 1.5,
-                                    margin: 'auto',
-                                }}
-                                responsive
-                                data={data}
+                    {selectedMeasureRecord &&
+                        selectedMeasureRecord.weight_nearest && (
+                            <ChildMeasurement
+                                title="Berat Badan menurut Umur (BB/U)"
+                                data={[
+                                    selectedMeasureRecord.weight_zscore.toString(),
+                                    selectedMeasureRecord.weight_nearest.toString(),
+                                    selectedMeasureRecord.weight.toString(),
+                                    selectedMeasureRecord.weight_category,
+                                ]}
+                                description={formatDateToReadable(
+                                    selectedMeasureRecord.note_date,
+                                )}
                             >
-                                <CartesianGrid
-                                    stroke="#eee"
-                                    strokeDasharray="5 5"
-                                />
-                                <XAxis
-                                    dataKey="age"
-                                    label={{
-                                        value: 'Umur',
-                                        position: 'top',
-                                        angle: 0,
+                                <LineChart
+                                    style={{
+                                        width: '100%',
+                                        aspectRatio: 1.5,
+                                        margin: 'auto',
                                     }}
-                                />
-                                <YAxis
-                                    dataKey="weight"
-                                    label={{
-                                        value: 'Berat Bedan',
-                                        position: 'insideLeft',
-                                        angle: -90,
-                                    }}
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="normal"
-                                    stroke="#82ca9d"
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="actual"
-                                    stroke="#333333"
-                                />
-                            </LineChart>
-                        </CardContent>
-                    </Card>
+                                    responsive
+                                    data={chartDataBB}
+                                >
+                                    <CartesianGrid
+                                        stroke="#eee"
+                                        strokeDasharray="5 5"
+                                    />
+                                    <XAxis
+                                        dataKey="age"
+                                        label={{
+                                            value: 'Umur',
+                                            position: 'top',
+                                            angle: 0,
+                                        }}
+                                    />
+                                    <YAxis
+                                        dataKey="weight"
+                                        label={{
+                                            value: 'Berat Bedan',
+                                            position: 'insideLeft',
+                                            angle: -90,
+                                        }}
+                                    />
+                                </LineChart>
+                            </ChildMeasurement>
+                        )}
                     {selectedMeasureRecord &&
                         selectedMeasureRecord.height_nearest && (
                             <ChildMeasurement
@@ -273,7 +240,48 @@ export default function ChildInfo({
                                 description={formatDateToReadable(
                                     selectedMeasureRecord.note_date,
                                 )}
-                            />
+                            >
+                                <LineChart
+                                    style={{
+                                        width: '100%',
+                                        aspectRatio: 1.5,
+                                        margin: 'auto',
+                                    }}
+                                    responsive
+                                    data={chartData}
+                                >
+                                    <CartesianGrid
+                                        stroke="#eee"
+                                        strokeDasharray="5 5"
+                                    />
+                                    <XAxis
+                                        dataKey="age"
+                                        label={{
+                                            value: 'Umur',
+                                            position: 'top',
+                                            angle: 0,
+                                        }}
+                                    />
+                                    <YAxis
+                                        dataKey="weight"
+                                        label={{
+                                            value: 'Panjang Bedan',
+                                            position: 'insideLeft',
+                                            angle: -90,
+                                        }}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="normal"
+                                        stroke="#82ca9d"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="actual"
+                                        stroke="#333333"
+                                    />
+                                </LineChart>
+                            </ChildMeasurement>
                         )}
                     {selectedMeasureRecord &&
                         selectedMeasureRecord.wh_nearest && (
@@ -288,7 +296,48 @@ export default function ChildInfo({
                                 description={formatDateToReadable(
                                     selectedMeasureRecord.note_date,
                                 )}
-                            />
+                            >
+                                <LineChart
+                                    style={{
+                                        width: '100%',
+                                        aspectRatio: 1.5,
+                                        margin: 'auto',
+                                    }}
+                                    responsive
+                                    data={chartData}
+                                >
+                                    <CartesianGrid
+                                        stroke="#eee"
+                                        strokeDasharray="5 5"
+                                    />
+                                    <XAxis
+                                        dataKey="age"
+                                        label={{
+                                            value: 'Umur',
+                                            position: 'top',
+                                            angle: 0,
+                                        }}
+                                    />
+                                    <YAxis
+                                        dataKey="weight"
+                                        label={{
+                                            value: 'Berat Bedan',
+                                            position: 'insideLeft',
+                                            angle: -90,
+                                        }}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="normal"
+                                        stroke="#82ca9d"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="actual"
+                                        stroke="#333333"
+                                    />
+                                </LineChart>
+                            </ChildMeasurement>
                         )}
                     {selectedMeasureRecord &&
                         selectedMeasureRecord.imt_nearest && (
@@ -303,7 +352,48 @@ export default function ChildInfo({
                                 description={formatDateToReadable(
                                     selectedMeasureRecord.note_date,
                                 )}
-                            />
+                            >
+                                <LineChart
+                                    style={{
+                                        width: '100%',
+                                        aspectRatio: 1.5,
+                                        margin: 'auto',
+                                    }}
+                                    responsive
+                                    data={chartData}
+                                >
+                                    <CartesianGrid
+                                        stroke="#eee"
+                                        strokeDasharray="5 5"
+                                    />
+                                    <XAxis
+                                        dataKey="age"
+                                        label={{
+                                            value: 'Umur',
+                                            position: 'top',
+                                            angle: 0,
+                                        }}
+                                    />
+                                    <YAxis
+                                        dataKey="weight"
+                                        label={{
+                                            value: 'Berat Bedan',
+                                            position: 'insideLeft',
+                                            angle: -90,
+                                        }}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="normal"
+                                        stroke="#82ca9d"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="actual"
+                                        stroke="#333333"
+                                    />
+                                </LineChart>
+                            </ChildMeasurement>
                         )}
                 </div>
             </div>

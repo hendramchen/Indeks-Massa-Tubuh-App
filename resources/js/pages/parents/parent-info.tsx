@@ -18,7 +18,13 @@ import { ParentDeleteChild } from './parent-delete-child';
 import ParentEdit from './parent-edit';
 import ParentEditChild from './parent-edit-child';
 
-export default function ParentInfo({ parent }: { parent: ParentType }) {
+export default function ParentInfo({
+    parent,
+    csrfToken,
+}: {
+    parent: ParentType;
+    csrfToken: string;
+}) {
     const children = parent.children ?? [];
 
     // const getAgeInMonths = (birthDate: string) => {
@@ -48,7 +54,7 @@ export default function ParentInfo({ parent }: { parent: ParentType }) {
                 </div>
 
                 <div className="flex gap-2">
-                    <ParentEdit parent={parent} />
+                    <ParentEdit parent={parent} csrfToken={csrfToken} />
                     <ParentDelete id={parent.id} />
                 </div>
             </div>

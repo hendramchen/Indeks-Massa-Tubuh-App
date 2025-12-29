@@ -15,10 +15,14 @@ import { Plus } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
 
 interface ParentCreateProps {
+    csrfToken: string;
     onParentCreated?: () => void;
 }
 
-export default function ParentCreate({ onParentCreated }: ParentCreateProps) {
+export default function ParentCreate({
+    csrfToken,
+    onParentCreated,
+}: ParentCreateProps) {
     const [open, setOpen] = useState(false);
 
     const [provinces, setProvinces] = useState<AutocompleteOption[]>([]);
@@ -78,9 +82,6 @@ export default function ParentCreate({ onParentCreated }: ParentCreateProps) {
 
     const ensureLocationExists = async (endpoint: string, name: string) => {
         if (!name) return;
-        const csrfToken = document
-            .querySelector('meta[name="csrf-token"]')
-            ?.getAttribute('content');
         await fetch(endpoint, {
             method: 'POST',
             headers: {

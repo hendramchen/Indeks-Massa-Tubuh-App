@@ -12,8 +12,10 @@ class ParentInfoController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        return Inertia::render('parents/parent-list');
+    {    
+        return Inertia::render('parents/parent-list', [
+            'csrfToken' => csrf_token(),
+        ]);
     }
 
     public function getParents(Request $request)
@@ -80,6 +82,7 @@ class ParentInfoController extends Controller
         return Inertia::render('parents/parent-info', [
             'parentId' => $id,
             'parent' => $parent,
+            'csrfToken' => csrf_token(),
         ]);
     }
 

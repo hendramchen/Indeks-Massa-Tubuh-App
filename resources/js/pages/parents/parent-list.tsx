@@ -11,7 +11,7 @@ import ParentTable from './parent-table';
 //     parents: DataWithPagination<ParentType>;
 // }
 
-export default function ParentList() {
+export default function ParentList({ csrfToken }: { csrfToken: string }) {
     const [parents, setParents] =
         useState<DataWithPagination<ParentType> | null>(null);
     const [pageLink, setPageLink] = useState<string | null>(null);
@@ -55,7 +55,10 @@ export default function ParentList() {
                 Daftar Orang Tua
             </h1>
             <ParentFilter setFilters={handleFilter} />
-            <ParentCreate onParentCreated={refetchParents} />
+            <ParentCreate
+                csrfToken={csrfToken}
+                onParentCreated={refetchParents}
+            />
             {parents && (
                 <ParentTable parents={parents} setPageLink={setPageLink} />
             )}

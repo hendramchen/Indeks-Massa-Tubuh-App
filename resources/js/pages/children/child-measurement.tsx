@@ -18,12 +18,14 @@ interface ChildMeasurementProps {
     title: string;
     description: string;
     data: string[];
+    children: React.ReactNode;
 }
 
 export default function ChildMeasurement({
     title,
     description,
     data,
+    children,
 }: ChildMeasurementProps) {
     return (
         <Card className="rounded-none md:rounded-lg">
@@ -51,6 +53,7 @@ export default function ChildMeasurement({
                         </TableRow>
                     </TableBody>
                 </Table>
+                {children}
             </CardContent>
         </Card>
     );

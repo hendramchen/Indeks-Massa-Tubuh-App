@@ -17,9 +17,10 @@ import { FormEvent, useEffect, useState } from 'react';
 
 interface ParentEditProps {
     parent: ParentType;
+    csrfToken: string;
 }
 
-export default function ParentEdit({ parent }: ParentEditProps) {
+export default function ParentEdit({ parent, csrfToken }: ParentEditProps) {
     const [open, setOpen] = useState(false);
 
     const [provinces, setProvinces] = useState<AutocompleteOption[]>([]);
@@ -92,9 +93,6 @@ export default function ParentEdit({ parent }: ParentEditProps) {
 
     const ensureLocationExists = async (endpoint: string, name: string) => {
         if (!name) return;
-        const csrfToken = document
-            .querySelector('meta[name="csrf-token"]')
-            ?.getAttribute('content');
         await fetch(endpoint, {
             method: 'POST',
             headers: {
