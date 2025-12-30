@@ -14,6 +14,7 @@ import {
     HistoryType,
     MeasurementType,
     SummaryType,
+    ZscoreField,
 } from '@/types/child-info';
 import { ParentType } from '@/types/parent-info';
 import { Head, Link } from '@inertiajs/react';
@@ -70,6 +71,7 @@ interface Props {
     parent: ParentType;
     ageString: string;
     measurements: MeasurementType[];
+    chartData: ZscoreField[];
 }
 
 export default function ChildInfo({
@@ -77,6 +79,7 @@ export default function ChildInfo({
     parent,
     ageString,
     measurements,
+    chartData,
 }: Props) {
     const [measureRecords, setMeasureRecords] =
         useState<MeasurementType[]>(measurements);
@@ -89,11 +92,11 @@ export default function ChildInfo({
     const [currentSummary, setCurrentSummary] = useState<SummaryType | null>(
         null,
     );
-    const [chartBB, setChartBB] = useState([]);
-    const chartDataBB = getChartBB(42, 14);
-    console.log(chartDataBB);
+    // const [chartBB, setChartBB] = useState([]);
+    const chartDataBB = getChartBB(42, 14, chartData);
     // const [chartPB, setChartPB] = useState([]);
     // const [chartIMT, setChartIMT] = useState([]);
+    // console.log(chartData);
 
     useEffect(() => {
         if (measurements.length === 0) return;
@@ -206,7 +209,7 @@ export default function ChildInfo({
                                 >
                                     <CartesianGrid
                                         stroke="#eee"
-                                        strokeDasharray="5 5"
+                                        strokeDasharray="6 6"
                                     />
                                     <XAxis
                                         dataKey="age"
@@ -223,6 +226,36 @@ export default function ChildInfo({
                                             position: 'insideLeft',
                                             angle: -90,
                                         }}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="actual"
+                                        stroke="#333333"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="min3SD"
+                                        stroke="#d9480f"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="min2SD"
+                                        stroke="#f08c00"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="median"
+                                        stroke="#82ca9d"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="plus2SD"
+                                        stroke="#c2255c"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="plus3SD"
+                                        stroke="#e03131"
                                     />
                                 </LineChart>
                             </ChildMeasurement>

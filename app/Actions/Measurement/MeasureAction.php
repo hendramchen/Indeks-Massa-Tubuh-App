@@ -453,4 +453,12 @@ class MeasureAction
         ];
         
     }
+
+    public function getChartDataByAge($gender, $ages, $zscoreType) {
+        return Zscore::select('min3SD', 'min2SD', 'min1SD', 'median', 'plus1SD', 'plus2SD', 'plus3SD')
+            ->where('gender', $gender)
+            ->where('zscore_type', $zscoreType)
+            ->whereIn('age', $ages)
+            ->get();
+    }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\ChildInfo;
 use App\Models\Measurement;
+use App\Models\Zscore;
 use App\Actions\Measurement\MeasureAction;
 
 class ChildInfoController extends Controller
@@ -79,11 +80,20 @@ class ChildInfoController extends Controller
         $measureAction = new MeasureAction();
         $ageInfo = $measureAction->getAgeFromBirthDate($child->birth_date);
         $ageString = $ageInfo['mode'] === 'months' ? $ageInfo['total_months'] . ' bulan' : $ageInfo['years'] . ' tahun ' . $ageInfo['months'] . ' bulan';
+
+        $ageList = [];
+        $ageInc = $ageInfo['total_months'] - 3;
+        for ($i = 0; $i < 6; $i++) {
+            $ageList[] = $ageInc;
+            $ageInc = $ageInc + 1;
+        }
+        $chartData = $measureAction->getChartDataByAge($child->gender, $ageList, 'BB/U');
         return Inertia::render('children/child-info', [
             'id' => $id, 'child' => $child, 
             'parent' => $parent, 
             'ageString' => $ageString,
-            'measurements' => $measurements
+            'measurements' => $measurements,
+            'chartData' => $chartData
         ]);
     }
 
@@ -146,9 +156,6 @@ class ChildInfoController extends Controller
             $measureAction = new MeasureAction();
             // break down birth date to age
             $ageInfo = $measureAction->getAgeFromBirthDate($child->birth_date);
-            // $age = $ageInfo['total_months'];
-            // $years = $ageInfo['years'];
-            // measurement
             $measurement = [];
             
             $measurement['weight'] = $weight;
@@ -178,13 +185,6 @@ class ChildInfoController extends Controller
                 $measurement['imt_nearest'] = $data['nearest'];
                 $measurement['imt_zscore'] = $data['zscoreWithSign'];
                 $measurement['imt_category'] = $data['category'];
-                // return response()->json([
-                //     'nearest' => $nearest,
-                //     'zscoreWithSign' => $zscoreWithSign,
-                //     'category' => $category,
-                //     'age' => $age,
-                //     'year' => $year,
-                // ]);
             } else {
                 $data = $measureAction->calculateAll($child->gender, $ageInfo['total_months'], $weight, $height);
                 $measurement['age'] = $ageInfo['total_months'];
@@ -203,12 +203,6 @@ class ChildInfoController extends Controller
                 $measurement['imt_nearest'] = $data['IMT']['nearest'];
                 $measurement['imt_zscore'] = $data['IMT']['zscoreWithSign'];
                 $measurement['imt_category'] = $data['IMT']['category'];
-                // return response()->json([
-                //     'data' => $data,
-                //     'month' => $ageInfo['months'],
-                //     'years' => $years,
-                //     'totalMonths' => $ageInfo['total_months'],
-                // ]);
             }
             try {
                 Measurement::create($measurement);
@@ -219,6 +213,17 @@ class ChildInfoController extends Controller
         }
         return response()->json([
             'data' => null
+        ]);
+    }
+
+    public function getChartDataBB($gender='female', $ages=[38, 39, 40, 41, 42, 43]) {
+        $data =  Zscore::select('min3SD', 'min2SD', 'min1SD', 'median', 'plus1SD', 'plus2SD', 'plus3SD')
+            ->where('gender', $gender)
+            ->where('zscore_type', 'BB/U')
+            ->whereIn('age', $ages)
+            ->get();
+        return response()->json([
+            'data' => $data
         ]);
     }
 

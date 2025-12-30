@@ -1,34 +1,34 @@
-export default function getChartBB(age: number, weight: number) {
-    const ageList = [];
-    let ageInc = age;
-    let ageDec = age;
-    for (let i = 0; i <= 2; i++) {
-        ageInc = ageInc + 2;
-        ageList.push(ageInc);
-    }
-    for (let i = 0; i <= 2; i++) {
-        ageDec = ageDec - 2;
-        ageList.push(ageDec);
-    }
-    const weightList: number[] = [];
-    let weightInc = weight;
-    let weightDec = weight;
-    for (let i = 0; i <= 2; i++) {
-        weightInc = weightInc + 2;
-        weightList.push(weightInc);
-    }
-    for (let i = 0; i <= 2; i++) {
-        weightDec = weightDec - 2;
-        weightList.push(weightDec);
-    }
+import { ZscoreField } from '../types/child-info';
 
-    ageList.sort((a, b) => a - b);
-    weightList.sort((a, b) => a - b);
+export default function getChartBB(
+    age: number,
+    weight: number,
+    zscores: ZscoreField[],
+) {
+    const ageList: number[] = [];
+    let ageInc = age - 3;
+    let weightInc = weight - 15;
+
+    const normalList = [11.5, 12, 13, 14, 15, 15.5];
+    const actualList = [null, 12, 12.5, 13.8, null, null];
+    // const normals: number[] = [];
+
+    for (let i = 0; i < 6; i++) {
+        ageList.push(ageInc);
+        ageInc = ageInc + 1;
+    }
 
     const data = ageList.map((age, index) => {
+        weightInc = weightInc + 5;
         return {
             age,
-            weight: weightList[index],
+            weight: weightInc,
+            median: zscores[index].median,
+            plus2SD: zscores[index].plus2SD,
+            plus3SD: zscores[index].plus3SD,
+            min2SD: zscores[index].min2SD,
+            min3SD: zscores[index].min3SD,
+            actual: actualList[index],
         };
     });
     return data;

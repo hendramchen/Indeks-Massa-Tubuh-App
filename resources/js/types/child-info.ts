@@ -47,3 +47,13 @@ export type SummaryType = {
     bbPbCategory: string;
     imtCategory: string;
 };
+
+export type ZscoreField = {
+    min3SD: number;
+    min2SD: number;
+    min1SD: number;
+    median: number;
+    plus1SD: number;
+    plus2SD: number;
+    plus3SD: number;
+};
