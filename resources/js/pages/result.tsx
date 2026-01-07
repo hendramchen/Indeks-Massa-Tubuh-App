@@ -9,12 +9,12 @@ import {
     zScoreIMTCategory,
     zScorePTBCategory,
 } from '@/lib/constant';
-import { SharedData } from '@/types';
+// import { SharedData } from '@/types';
 import { ZscoreData } from '@/types/zscore';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
-import ResultForm from './result-form';
+// import ResultForm from './result-form';
 
 export default function Result({
     name,
@@ -56,7 +56,7 @@ export default function Result({
     const [imtZscore, setImtZscore] = useState<string>('');
     const [imtCategory, setImtCategory] = useState<string>('');
 
-    const { auth } = usePage<SharedData>().props;
+    // const { auth } = usePage<SharedData>().props;
     return (
         <SigiziLayout>
             <Head title="Hasil Perhitungan" />
@@ -69,34 +69,39 @@ export default function Result({
                         Hasil Perhitungan
                     </h1>
                 </header>
-                <div className="my-4 flex flex-col">
-                    <Label className="font-bold">Nama Anak</Label>
-                    <p className="text-2xl">{name}</p>
+                <div className="flex flex-col gap-1 px-4 md:px-0">
+                    <div className="my-4 flex flex-col">
+                        <Label className="font-bold">Nama Anak</Label>
+                        <p className="text-2xl">{name}</p>
+                    </div>
+                    <div className="mb-6 flex w-full gap-4">
+                        <div className="my-4 flex w-1/2 flex-col gap-1">
+                            <Label className="font-bold">Tinggi Badan</Label>
+                            <p className="text-2xl">{height} cm</p>
+                        </div>
+                        <div className="my-4 flex w-1/2 flex-col gap-1">
+                            <Label className="font-bold">Berat Badan</Label>
+                            <p className="text-2xl">{weight} kg</p>
+                        </div>
+                    </div>
+                    <div className="mb-6 flex w-full gap-4">
+                        <div className="my-4 flex w-1/2 flex-col gap-1">
+                            <Label className="font-bold">Umur</Label>
+                            <p className="text-2xl">
+                                {year
+                                    ? `${year}th ${month}bln`
+                                    : `${age} bulan`}
+                            </p>
+                        </div>
+                        <div className="my-4 flex w-1/2 flex-col gap-1">
+                            <Label className="font-bold">Jenis Kelamin</Label>
+                            <p className="text-2xl">
+                                {genderOptions[gender as 'male' | 'female']}
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div className="mb-6 flex w-full gap-4">
-                    <div className="my-4 flex w-1/2 flex-col gap-1">
-                        <Label className="font-bold">Tinggi Badan</Label>
-                        <p className="text-2xl">{height} cm</p>
-                    </div>
-                    <div className="my-4 flex w-1/2 flex-col gap-1">
-                        <Label className="font-bold">Berat Badan</Label>
-                        <p className="text-2xl">{weight} kg</p>
-                    </div>
-                </div>
-                <div className="mb-6 flex w-full gap-4">
-                    <div className="my-4 flex w-1/2 flex-col gap-1">
-                        <Label className="font-bold">Umur</Label>
-                        <p className="text-2xl">
-                            {year ? `${year}th ${month}bln` : `${age} bulan`}
-                        </p>
-                    </div>
-                    <div className="my-4 flex w-1/2 flex-col gap-1">
-                        <Label className="font-bold">Jenis Kelamin</Label>
-                        <p className="text-2xl">
-                            {genderOptions[gender as 'male' | 'female']}
-                        </p>
-                    </div>
-                </div>
+
                 <div className="container flex flex-col justify-between gap-4 opacity-100 transition-opacity duration-750 md:flex-row lg:grow starting:opacity-0">
                     {year ? (
                         <CardResult
@@ -209,32 +214,11 @@ export default function Result({
                         </>
                     )}
                 </div>
-                {auth.user && (
-                    <ResultForm
-                        childName={name}
-                        gender={gender}
-                        age={age}
-                        year={year}
-                        weight={weight}
-                        height={height}
-                        weightNearest={weightNearest}
-                        weightZscore={weightZscore}
-                        weightCategory={weightCategory}
-                        heightNearest={heightNearest}
-                        heightZscore={heightZscore}
-                        heightCategory={heightCategory}
-                        whNearest={whNearest}
-                        whZscore={whZscore}
-                        whCategory={whCategory}
-                        imtNearest={imtNearest}
-                        imtZscore={imtZscore}
-                        imtCategory={imtCategory}
-                    />
-                )}
+
                 <div className="my-4">
                     <Link
                         href="/"
-                        className="flex items-center gap-2 rounded-lg bg-gray-200 px-6 py-2 font-semibold"
+                        className="flex items-center gap-2 rounded-none bg-gray-200 px-6 py-2 font-semibold md:rounded-lg"
                     >
                         <ArrowLeft className="text-gray-500" /> Kembali
                     </Link>

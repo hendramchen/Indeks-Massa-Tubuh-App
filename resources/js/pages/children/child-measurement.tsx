@@ -1,3 +1,4 @@
+// import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -13,25 +14,37 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+// import { TrendingUp } from 'lucide-react';
+// import ChildChart from './child-chart';
 
 interface ChildMeasurementProps {
     title: string;
     description: string;
     data: string[];
-    children: React.ReactNode;
+    // zscoreType: string;
+    // gender: string;
+    // age: number;
 }
 
 export default function ChildMeasurement({
     title,
     description,
     data,
-    children,
+    // zscoreType,
+    // gender,
+    // age
 }: ChildMeasurementProps) {
+    // const handleGetChartData = () => {};
     return (
         <Card className="rounded-none md:rounded-lg">
             <CardHeader>
-                <CardTitle className="text-xl font-semibold text-[#d6336c]">
-                    {title}
+                <CardTitle className="flex items-center justify-between">
+                    <h1 className="text-xl font-semibold text-[#d6336c]">
+                        {title}
+                    </h1>
+                    {/* <Button variant="outline" onClick={handleGetChartData}>
+                        <TrendingUp />
+                    </Button> */}
                 </CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
@@ -53,7 +66,7 @@ export default function ChildMeasurement({
                         </TableRow>
                     </TableBody>
                 </Table>
-                {children}
+                {/* <ChildChart data={[]} /> */}
             </CardContent>
         </Card>
     );

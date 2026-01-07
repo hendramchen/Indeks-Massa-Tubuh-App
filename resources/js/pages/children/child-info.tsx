@@ -7,121 +7,64 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import SigiziLayout from '@/layouts/sigizi-layout';
-import getChartBB from '@/lib/chart-func';
+// import getChartBB from '@/lib/chart-func';
 import { formatDateToReadable } from '@/lib/utils';
 import {
     ChildType,
     HistoryType,
     MeasurementType,
     SummaryType,
-    ZscoreField,
 } from '@/types/child-info';
 import { ParentType } from '@/types/parent-info';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Download } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import { useState } from 'react';
 import ChildBio from './child-bio';
 import ChildCreateMeasure from './child-create-measure';
 import ChildHistory from './child-history';
 import ChildMeasurement from './child-measurement';
 import ChildSummary from './child-summary';
 
-const chartData = [
-    {
-        age: 0,
-        weight: 2,
-        normal: 1.5,
-        actual: null,
-    },
-    {
-        age: 1,
-        weight: 3,
-        normal: 2,
-        actual: null,
-    },
-    {
-        age: 2,
-        weight: 4,
-        normal: 2.5,
-        actual: 2,
-    },
-    {
-        age: 3,
-        weight: 5,
-        normal: 3,
-        actual: 4,
-    },
-    {
-        age: 4,
-        weight: 6,
-        normal: 3.5,
-        actual: 5,
-    },
-    {
-        age: 5,
-        weight: 7,
-        normal: 4,
-        actual: null,
-    },
-];
-
 interface Props {
     child: ChildType;
     parent: ParentType;
-    ageString: string;
-    measurements: MeasurementType[];
-    chartData: ZscoreField[];
+    histories: HistoryType[];
+    // measurements: MeasurementType[];
+    // chartData: ZscoreField[];
 }
 
-export default function ChildInfo({
-    child,
-    parent,
-    ageString,
-    measurements,
-    chartData,
-}: Props) {
-    const [measureRecords, setMeasureRecords] =
-        useState<MeasurementType[]>(measurements);
+export default function ChildInfo({ child, parent, histories }: Props) {
+    // const [measureRecords, setMeasureRecords] = useState<MeasurementType[]>([]);
     const [selectedMeasureRecord, setSelectedMeasureRecord] =
         useState<MeasurementType | null>(null);
-    const [historyData, setHistoryData] = useState<HistoryType[]>([]);
+    // const [historyData, setHistoryData] = useState<HistoryType[]>([]);
     const [selectedHistory, setSelectedHistory] = useState<HistoryType | null>(
         null,
     );
     const [currentSummary, setCurrentSummary] = useState<SummaryType | null>(
         null,
     );
-    // const [chartBB, setChartBB] = useState([]);
-    const chartDataBB = getChartBB(42, 14, chartData);
-    // const [chartPB, setChartPB] = useState([]);
-    // const [chartIMT, setChartIMT] = useState([]);
-    // console.log(chartData);
 
-    useEffect(() => {
-        if (measurements.length === 0) return;
-        const histories = measurements.map((measure, index) => ({
-            id: index,
-            note_date: measure.note_date,
-        }));
-        setHistoryData(histories);
-        setSelectedHistory({
-            id: 0,
-            note_date: measurements[0].note_date,
-        });
-        setSelectedMeasureRecord(measurements[0]);
-    }, [measurements]);
+    const fetchMeasurement = async (history: HistoryType) => {
+        const response = await fetch(`/measurements/${history.id}`);
+        const { data } = await response.json();
+        if (data) {
+            const measurement: MeasurementType = data;
+            setSelectedMeasureRecord(measurement);
+            const summary = {
+                bbCategory: measurement?.weight_category,
+                pbCategory: measurement?.height_category,
+                bbPbCategory: measurement?.wh_category,
+                imtCategory: measurement?.imt_category,
+            };
+            setCurrentSummary(summary);
+        }
+    };
 
-    const handleSelectHistory = (history: HistoryType) => {
+    const handleSelectHistory = async (history: HistoryType) => {
         setSelectedHistory(history);
-        setSelectedMeasureRecord(measureRecords[history.id]);
-        const summ = {
-            bbCategory: measureRecords[history.id].weight_category,
-            pbCategory: measureRecords[history.id].height_category,
-            bbPbCategory: measureRecords[history.id].wh_category,
-            imtCategory: measureRecords[history.id].imt_category,
-        };
-        setCurrentSummary(summ);
+        // call api to get measurement by history id
+        await fetchMeasurement(history);
     };
     return (
         <SigiziLayout>
@@ -146,13 +89,9 @@ export default function ChildInfo({
                 <div className="flex w-full flex-col gap-4 md:w-1/3">
                     <Card className="w-full rounded-none md:rounded-lg">
                         <CardContent className="flex flex-col gap-4">
-                            <ChildBio
-                                child={child}
-                                parent={parent}
-                                age={ageString}
-                            />
+                            <ChildBio child={child} parent={parent} />
                             <ChildHistory
-                                historyData={historyData}
+                                historyData={histories}
                                 selectedHistory={selectedHistory}
                                 handleSelectHistory={handleSelectHistory}
                             />
@@ -160,275 +99,136 @@ export default function ChildInfo({
                     </Card>
                     <ChildSummary summary={currentSummary} />
                 </div>
-                <div className="flex w-full flex-col gap-4 md:w-2/3">
-                    <Card className="rounded-none md:rounded-lg">
+                {histories.length === 0 && (
+                    <Card className="w-full rounded-none md:rounded-lg">
                         <CardHeader>
                             <CardTitle className="text-xl font-semibold text-[#d6336c]">
-                                Pengukuran Fisik
+                                Belum ada pengukuran
                             </CardTitle>
-                            <CardDescription>
-                                {selectedMeasureRecord?.note_date &&
-                                    formatDateToReadable(
-                                        selectedMeasureRecord.note_date,
-                                    )}
-                            </CardDescription>
                         </CardHeader>
-                        <CardContent className="flex w-full flex-col flex-wrap gap-4 md:flex-row">
-                            <div className="flex-1">
-                                <h1 className="font-bold">Berat Badan</h1>
-                                <p>{selectedMeasureRecord?.weight} kg</p>
-                            </div>
-                            <div className="flex-1">
-                                <h1 className="font-bold">Panjang Badan</h1>
-                                <p>{selectedMeasureRecord?.height} cm</p>
-                            </div>
+                        <CardContent className="flex flex-col gap-4">
+                            <p>Silahkan tambah atau buat pengukuran baru.</p>
                         </CardContent>
                     </Card>
-                    {selectedMeasureRecord &&
-                        selectedMeasureRecord.weight_nearest && (
-                            <ChildMeasurement
-                                title="Berat Badan menurut Umur (BB/U)"
-                                data={[
-                                    selectedMeasureRecord.weight_zscore.toString(),
-                                    selectedMeasureRecord.weight_nearest.toString(),
-                                    selectedMeasureRecord.weight.toString(),
-                                    selectedMeasureRecord.weight_category,
-                                ]}
-                                description={formatDateToReadable(
-                                    selectedMeasureRecord.note_date,
-                                )}
-                            >
-                                <LineChart
-                                    style={{
-                                        width: '100%',
-                                        aspectRatio: 1.5,
-                                        margin: 'auto',
-                                    }}
-                                    responsive
-                                    data={chartDataBB}
-                                >
-                                    <CartesianGrid
-                                        stroke="#eee"
-                                        strokeDasharray="6 6"
-                                    />
-                                    <XAxis
-                                        dataKey="age"
-                                        label={{
-                                            value: 'Umur',
-                                            position: 'top',
-                                            angle: 0,
-                                        }}
-                                    />
-                                    <YAxis
-                                        dataKey="weight"
-                                        label={{
-                                            value: 'Berat Bedan',
-                                            position: 'insideLeft',
-                                            angle: -90,
-                                        }}
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="actual"
-                                        stroke="#333333"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="min3SD"
-                                        stroke="#d9480f"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="min2SD"
-                                        stroke="#f08c00"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="median"
-                                        stroke="#82ca9d"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="plus2SD"
-                                        stroke="#c2255c"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="plus3SD"
-                                        stroke="#e03131"
-                                    />
-                                </LineChart>
-                            </ChildMeasurement>
-                        )}
-                    {selectedMeasureRecord &&
-                        selectedMeasureRecord.height_nearest && (
-                            <ChildMeasurement
-                                title="Panjang Badan menurut Umur (PB/U)"
-                                data={[
-                                    selectedMeasureRecord.height_zscore.toString(),
-                                    selectedMeasureRecord.height_nearest.toString(),
-                                    selectedMeasureRecord.height.toString(),
-                                    selectedMeasureRecord.height_category,
-                                ]}
-                                description={formatDateToReadable(
-                                    selectedMeasureRecord.note_date,
-                                )}
-                            >
-                                <LineChart
-                                    style={{
-                                        width: '100%',
-                                        aspectRatio: 1.5,
-                                        margin: 'auto',
-                                    }}
-                                    responsive
-                                    data={chartData}
-                                >
-                                    <CartesianGrid
-                                        stroke="#eee"
-                                        strokeDasharray="5 5"
-                                    />
-                                    <XAxis
-                                        dataKey="age"
-                                        label={{
-                                            value: 'Umur',
-                                            position: 'top',
-                                            angle: 0,
-                                        }}
-                                    />
-                                    <YAxis
-                                        dataKey="weight"
-                                        label={{
-                                            value: 'Panjang Bedan',
-                                            position: 'insideLeft',
-                                            angle: -90,
-                                        }}
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="normal"
-                                        stroke="#82ca9d"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="actual"
-                                        stroke="#333333"
-                                    />
-                                </LineChart>
-                            </ChildMeasurement>
-                        )}
-                    {selectedMeasureRecord &&
-                        selectedMeasureRecord.wh_nearest && (
-                            <ChildMeasurement
-                                title="Berat Badan menurut Panjang Badan (BB/PB)"
-                                data={[
-                                    selectedMeasureRecord.wh_zscore.toString(),
-                                    selectedMeasureRecord.wh_nearest.toString(),
-                                    selectedMeasureRecord.weight.toString(),
-                                    selectedMeasureRecord.wh_category,
-                                ]}
-                                description={formatDateToReadable(
-                                    selectedMeasureRecord.note_date,
-                                )}
-                            >
-                                <LineChart
-                                    style={{
-                                        width: '100%',
-                                        aspectRatio: 1.5,
-                                        margin: 'auto',
-                                    }}
-                                    responsive
-                                    data={chartData}
-                                >
-                                    <CartesianGrid
-                                        stroke="#eee"
-                                        strokeDasharray="5 5"
-                                    />
-                                    <XAxis
-                                        dataKey="age"
-                                        label={{
-                                            value: 'Umur',
-                                            position: 'top',
-                                            angle: 0,
-                                        }}
-                                    />
-                                    <YAxis
-                                        dataKey="weight"
-                                        label={{
-                                            value: 'Berat Bedan',
-                                            position: 'insideLeft',
-                                            angle: -90,
-                                        }}
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="normal"
-                                        stroke="#82ca9d"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="actual"
-                                        stroke="#333333"
-                                    />
-                                </LineChart>
-                            </ChildMeasurement>
-                        )}
-                    {selectedMeasureRecord &&
-                        selectedMeasureRecord.imt_nearest && (
-                            <ChildMeasurement
-                                title="Indeks Massa Tubuh menurut Umur (IMT/U)"
-                                data={[
-                                    selectedMeasureRecord.imt_zscore.toString(),
-                                    selectedMeasureRecord.imt_nearest.toString(),
-                                    selectedMeasureRecord.imt_actual.toString(),
-                                    selectedMeasureRecord.imt_category,
-                                ]}
-                                description={formatDateToReadable(
-                                    selectedMeasureRecord.note_date,
-                                )}
-                            >
-                                <LineChart
-                                    style={{
-                                        width: '100%',
-                                        aspectRatio: 1.5,
-                                        margin: 'auto',
-                                    }}
-                                    responsive
-                                    data={chartData}
-                                >
-                                    <CartesianGrid
-                                        stroke="#eee"
-                                        strokeDasharray="5 5"
-                                    />
-                                    <XAxis
-                                        dataKey="age"
-                                        label={{
-                                            value: 'Umur',
-                                            position: 'top',
-                                            angle: 0,
-                                        }}
-                                    />
-                                    <YAxis
-                                        dataKey="weight"
-                                        label={{
-                                            value: 'Berat Bedan',
-                                            position: 'insideLeft',
-                                            angle: -90,
-                                        }}
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="normal"
-                                        stroke="#82ca9d"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="actual"
-                                        stroke="#333333"
-                                    />
-                                </LineChart>
-                            </ChildMeasurement>
-                        )}
-                </div>
+                )}
+                {histories.length > 0 && !selectedHistory && (
+                    <Card className="w-full rounded-none md:rounded-lg">
+                        <CardHeader>
+                            <CardTitle className="text-xl font-semibold text-[#d6336c]">
+                                Pilih riwayat pengukuran
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col gap-4">
+                            <p>
+                                Pilih riwayat sesuai tanggal pengukuran, maka
+                                data akan dimuat dan ditampilkan.
+                            </p>
+                        </CardContent>
+                    </Card>
+                )}
+                {histories.length > 0 && selectedHistory && (
+                    <div className="flex w-full flex-col gap-4 md:w-2/3">
+                        <Card className="rounded-none md:rounded-lg">
+                            <CardHeader>
+                                <CardTitle className="text-xl font-semibold text-[#d6336c]">
+                                    Pengukuran Fisik & Umur
+                                </CardTitle>
+                                <CardDescription>
+                                    {selectedMeasureRecord?.note_date &&
+                                        formatDateToReadable(
+                                            selectedMeasureRecord.note_date,
+                                        )}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex w-full flex-col flex-wrap gap-4 md:flex-row">
+                                <div className="flex-1">
+                                    <h1 className="font-bold">Berat Badan</h1>
+                                    <p>{selectedMeasureRecord?.weight} kg</p>
+                                </div>
+                                <div className="flex-1">
+                                    <h1 className="font-bold">Panjang Badan</h1>
+                                    <p>{selectedMeasureRecord?.height} cm</p>
+                                </div>
+                                <div className="flex-1">
+                                    <h1 className="font-bold">Umur</h1>
+                                    <p>{selectedMeasureRecord?.age} bulan</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        {selectedMeasureRecord &&
+                            selectedMeasureRecord.weight_nearest && (
+                                <ChildMeasurement
+                                    title="Berat Badan menurut Umur (BB/U)"
+                                    data={[
+                                        selectedMeasureRecord.weight_zscore.toString(),
+                                        selectedMeasureRecord.weight_nearest.toString(),
+                                        selectedMeasureRecord.weight.toString(),
+                                        selectedMeasureRecord.weight_category,
+                                    ]}
+                                    description={formatDateToReadable(
+                                        selectedMeasureRecord.note_date,
+                                    )}
+                                    // zscoreType="BB/U"
+                                    // gender={child.gender}
+                                    // age={selectedMeasureRecord.age}
+                                />
+                            )}
+                        {selectedMeasureRecord &&
+                            selectedMeasureRecord.height_nearest && (
+                                <ChildMeasurement
+                                    title="Panjang Badan menurut Umur (PB/U)"
+                                    data={[
+                                        selectedMeasureRecord.height_zscore.toString(),
+                                        selectedMeasureRecord.height_nearest.toString(),
+                                        selectedMeasureRecord.height.toString(),
+                                        selectedMeasureRecord.height_category,
+                                    ]}
+                                    description={formatDateToReadable(
+                                        selectedMeasureRecord.note_date,
+                                    )}
+                                    // zscoreType="weight"
+                                    // gender={child.gender}
+                                    // age={selectedMeasureRecord.age}
+                                />
+                            )}
+                        {selectedMeasureRecord &&
+                            selectedMeasureRecord.wh_nearest && (
+                                <ChildMeasurement
+                                    title="Berat Badan menurut Panjang Badan (BB/PB)"
+                                    data={[
+                                        selectedMeasureRecord.wh_zscore.toString(),
+                                        selectedMeasureRecord.wh_nearest.toString(),
+                                        selectedMeasureRecord.weight.toString(),
+                                        selectedMeasureRecord.wh_category,
+                                    ]}
+                                    description={formatDateToReadable(
+                                        selectedMeasureRecord.note_date,
+                                    )}
+                                    // zscoreType="wh"
+                                    // gender={child.gender}
+                                    // age={selectedMeasureRecord.age}
+                                />
+                            )}
+                        {selectedMeasureRecord &&
+                            selectedMeasureRecord.imt_nearest && (
+                                <ChildMeasurement
+                                    title="Indeks Massa Tubuh menurut Umur (IMT/U)"
+                                    data={[
+                                        selectedMeasureRecord.imt_zscore.toString(),
+                                        selectedMeasureRecord.imt_nearest.toString(),
+                                        selectedMeasureRecord.imt_actual.toString(),
+                                        selectedMeasureRecord.imt_category,
+                                    ]}
+                                    description={formatDateToReadable(
+                                        selectedMeasureRecord.note_date,
+                                    )}
+                                    // zscoreType="imt"
+                                    // gender={child.gender}
+                                    // age={selectedMeasureRecord.age}
+                                />
+                            )}
+                    </div>
+                )}
             </div>
         </SigiziLayout>
     );

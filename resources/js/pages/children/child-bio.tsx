@@ -6,9 +6,8 @@ import ParentEditChild from '../parents/parent-edit-child';
 interface Props {
     child: ChildType;
     parent: ParentType;
-    age: string;
 }
-export default function ChildBio({ child, parent, age }: Props) {
+export default function ChildBio({ child, parent }: Props) {
     return (
         <>
             <div className="flex items-center justify-between">
@@ -25,10 +24,6 @@ export default function ChildBio({ child, parent, age }: Props) {
             <div className="flex flex-col justify-between md:flex-row">
                 <h1 className="font-bold">Tanggal Lahir</h1>
                 <p>{formatDateToReadable(child.birth_date)}</p>
-            </div>
-            <div className="flex flex-col justify-between md:flex-row">
-                <h1 className="font-bold">Umur</h1>
-                <p>{age}</p>
             </div>
             <hr />
             <h1 className="text-xl font-semibold text-[#d6336c]">

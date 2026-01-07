@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/district', [DistrictController::class, 'index'])->name('district.index');
     Route::post('/province', [ProvinceController::class, 'store'])->name('province.store');
     Route::get('/province', [ProvinceController::class, 'index'])->name('province.index');
+    Route::get('/measurements/{id}', [ChildInfoController::class, 'getMeasurementById'])->name('measurements.show');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

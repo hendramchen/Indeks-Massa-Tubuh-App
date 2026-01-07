@@ -42,10 +42,10 @@ export type HistoryType = {
 };
 
 export type SummaryType = {
-    bbCategory: string;
-    pbCategory: string;
-    bbPbCategory: string;
-    imtCategory: string;
+    bbCategory: string | null;
+    pbCategory: string | null;
+    bbPbCategory: string | null;
+    imtCategory: string | null;
 };
 
 export type ZscoreField = {

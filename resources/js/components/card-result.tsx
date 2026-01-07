@@ -145,7 +145,7 @@ export default function CardResult({
     ]);
     if (!zScoreData) return null;
     return (
-        <Card className="dark:bg-white">
+        <Card className="w-full rounded-none md:rounded-lg">
             <CardHeader className="border-b border-gray-400 pb-4">
                 <CardTitle className="dark:text-black">{title}</CardTitle>
                 <CardDescription className="dark:text-gray-600">

@@ -77,23 +77,32 @@ class ChildInfoController extends Controller
         }
         $parent = $child->parentInfo;
         $measurements = $child->measurements()->orderByDesc('note_date')->get();
-        $measureAction = new MeasureAction();
-        $ageInfo = $measureAction->getAgeFromBirthDate($child->birth_date);
-        $ageString = $ageInfo['mode'] === 'months' ? $ageInfo['total_months'] . ' bulan' : $ageInfo['years'] . ' tahun ' . $ageInfo['months'] . ' bulan';
-
-        $ageList = [];
-        $ageInc = $ageInfo['total_months'] - 3;
-        for ($i = 0; $i < 6; $i++) {
-            $ageList[] = $ageInc;
-            $ageInc = $ageInc + 1;
+        $histories = [];
+        if ($measurements) {
+            foreach ($measurements as $measurement) {
+                $histories[] = [
+                    'id' => $measurement->id,
+                    'note_date' => $measurement->note_date,
+                ];
+            }
         }
-        $chartData = $measureAction->getChartDataByAge($child->gender, $ageList, 'BB/U');
+        // $measureAction = new MeasureAction();
+        // $ageInfo = $measureAction->getAgeFromBirthDate($child->birth_date);
+
+        // $ageList = [];
+        // $ageInc = $ageInfo['total_months'] - 3;
+        // for ($i = 0; $i < 5; $i++) {
+        //     $ageList[] = $ageInc;
+        //     $ageInc = $ageInc + 1;
+        // }
+        // $chartData = $measureAction->getChartDataByAge($child->gender, $ageList, 'BB/U');
         return Inertia::render('children/child-info', [
-            'id' => $id, 'child' => $child, 
-            'parent' => $parent, 
-            'ageString' => $ageString,
-            'measurements' => $measurements,
-            'chartData' => $chartData
+            'id' => $id, 
+            'child' => $child, 
+            'parent' => $parent,
+            'histories' => $histories,
+            // 'measurements' => $measurements,
+            // 'chartData' => $chartData
         ]);
     }
 
@@ -155,7 +164,7 @@ class ChildInfoController extends Controller
         if ($child) {
             $measureAction = new MeasureAction();
             // break down birth date to age
-            $ageInfo = $measureAction->getAgeFromBirthDate($child->birth_date);
+            $ageInfo = $measureAction->getAgeFromBirthDate($child->birth_date, $noteDate);
             $measurement = [];
             
             $measurement['weight'] = $weight;
@@ -216,16 +225,34 @@ class ChildInfoController extends Controller
         ]);
     }
 
-    public function getChartDataBB($gender='female', $ages=[38, 39, 40, 41, 42, 43]) {
+    public function getChartDataByAge($gender='female', $zscoreType='BB/U', $ages=[38, 39, 40, 41, 42, 43]) {
         $data =  Zscore::select('min3SD', 'min2SD', 'min1SD', 'median', 'plus1SD', 'plus2SD', 'plus3SD')
             ->where('gender', $gender)
-            ->where('zscore_type', 'BB/U')
+            ->where('zscore_type', $zscoreType)
             ->whereIn('age', $ages)
             ->get();
+
         return response()->json([
             'data' => $data
         ]);
     }
 
+    public function getChartDataByHeight($gender='female', $zscoreType='', $heights=[38, 39, 40, 41, 42, 43]) {
+        $data =  Zscore::select('min3SD', 'min2SD', 'min1SD', 'median', 'plus1SD', 'plus2SD', 'plus3SD')
+            ->where('gender', $gender)
+            ->where('zscore_type', $zscoreType)
+            ->whereIn('height', $heights)
+            ->get();
 
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+
+    public function getMeasurementById($id) {
+        $measurement = Measurement::find($id);
+        return response()->json([
+            'data' => $measurement
+        ]);
+    }
 }
